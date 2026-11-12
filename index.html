@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,242 +5,1234 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SENSI X IA - Calibrador Free Fire</title>
 <style>
-:root{--bg:#0A0A0A;--card:#121212;--red:#FF0040;--red2:#FF4D7A;--line:rgba(255,255,255,.1)}
-*{box-sizing:border-box;margin:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-body{background:var(--bg);color:#fff;min-height:100vh;padding:calc(20px + env(safe-area-inset-top)) 16px 40px}
-.wrap{max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
-h1{font-size:28px;font-weight:800;text-align:center;line-height:1.1}
-h1 span{color:var(--red)}
-.sub{font-size:13px;color:rgba(255,255,255,.6);text-align:center;line-height:1.5}
-.card{background:#0F0F0F;border:1px solid rgba(255,0,64,.5);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 0 30px rgba(255,0,64,.12)}
-.lbl{font-size:10px;letter-spacing:.16em;color:rgba(255,255,255,.4)}
-.row{display:grid;gap:8px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}
-button{cursor:pointer;color:inherit;border:1px solid var(--line);background:#1A1A1A;border-radius:12px;height:46px;font-weight:700;font-size:12px;letter-spacing:.08em}
-button.on{background:var(--red);border-color:var(--red2);box-shadow:0 0 14px rgba(255,0,64,.5)}
-button.go{height:54px;font-size:14px;letter-spacing:.12em;background:linear-gradient(#FF0040,#CC0033);border-color:var(--red)}
-button:disabled{opacity:.6}
-input{width:100%;height:46px;border-radius:12px;background:#161616;border:1px solid var(--line);color:#fff;padding:0 14px;font-size:14px}
-input:focus{outline:none;border-color:rgba(255,0,64,.6)}
-.list{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:#161616;border:1px solid var(--line);border-radius:14px;max-height:220px;overflow-y:auto;z-index:5}
-.list div{padding:10px 14px;display:flex;justify-content:space-between;font-size:13px;cursor:pointer}
-.list div:hover{background:rgba(255,255,255,.06)}.list small{color:rgba(255,255,255,.4)}
-.res{display:none}.res.show{display:flex}
-.item{display:flex;align-items:center;justify-content:space-between;background:#151515;border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:0 14px;height:48px;font-size:12px;font-weight:600;text-transform:uppercase}
-.bar{width:70px;height:6px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden;display:inline-block;margin-right:10px;vertical-align:middle}
-.bar i{display:block;height:100%;background:linear-gradient(90deg,#FF0040,#FF7A9E)}
-.val{font-size:17px;font-weight:800;display:inline-block;width:34px;text-align:right}
-.info{background:#1A1A1A;border:1px solid var(--line);border-radius:14px;padding:12px;font-size:12px;line-height:1.6;color:rgba(255,255,255,.7)}
-.tip{font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.5}
-#load{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:9;font-size:14px;letter-spacing:.14em}
-#load.show{display:flex}
-.sp{width:70px;height:70px;border-radius:50%;border:4px solid rgba(255,0,64,.2);border-top-color:var(--red);animation:s 1s linear infinite}
-@keyframes s{to{transform:rotate(360deg)}}
-#load{backdrop-filter:blur(8px);padding:24px;text-align:center}
-.ld{position:relative;width:88px;height:88px;display:flex;align-items:center;justify-content:center}
-.ld .sp{position:absolute;inset:0;width:88px;height:88px;box-shadow:0 0 18px rgba(255,0,64,.45)}
-.ld .in{position:absolute;inset:8px;border-radius:50%;border:2px dashed rgba(255,0,64,.25);animation:s 1.8s linear infinite reverse}
-.ld .dot{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 14px var(--red)}
-.big{font-size:44px;font-weight:800;color:var(--red);text-shadow:0 0 12px rgba(255,0,64,.8);line-height:1}
-.lc{width:100%;max-width:320px;background:rgba(21,21,21,.8);border:1px solid rgba(255,0,64,.2);border-radius:14px;padding:12px 16px;text-align:left;font-size:12px;letter-spacing:0;display:flex;flex-direction:column;gap:10px}
-.pb{height:4px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}
-.pb i{display:block;height:100%;width:0;background:linear-gradient(90deg,#FF0040,#FF7A9E);transition:width 1s linear}
-#ban{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);pointer-events:none;padding:24px}
-#ban.show{display:flex}
-.bn{position:relative;overflow:hidden;min-width:280px;background:#000;border:1.5px solid rgba(255,0,64,.9);border-radius:20px;padding:24px 32px;text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;animation:pop .6s cubic-bezier(.68,-.55,.265,1.55) forwards,glow 1.2s ease-in-out infinite}
-.bn.out{animation:out .45s cubic-bezier(.55,.055,.675,.19) forwards}
-.bn .sh{position:absolute;top:0;left:0;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);animation:sweep 1.2s ease-out .3s forwards}
-@keyframes pop{0%{transform:scale(.5) translateY(20px);opacity:0}50%{transform:scale(1.1) translateY(-5px);opacity:1}100%{transform:scale(1) translateY(0);opacity:1}}
-@keyframes out{to{transform:scale(.9) translateY(-80px);opacity:0}}
-@keyframes sweep{0%{transform:translateX(-150%) skewX(-12deg)}100%{transform:translateX(150%) skewX(-12deg)}}
-@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(255,0,64,.8),0 0 40px rgba(255,0,64,.4)}50%{box-shadow:0 0 30px #FF0040,0 0 60px rgba(255,0,64,.6)}}
-.res.up{animation:up .7s cubic-bezier(.16,1,.3,1) both}
-@keyframes up{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}
-@media (prefers-color-scheme:light){body{background:var(--bg)}}
+:root{--bg:#0A0A0A;--card:#121212;--red:#FF0040;--red2:#FF4D70;--text:#F5F5F5;--muted:#999;--line:#292929;--green:#27D98B}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding:18px 14px 30px}
+.wrap{max-width:520px;margin:auto}.top{text-align:center;margin:8px 0 20px}.logo{font-size:29px;font-weight:900;letter-spacing:1px}.logo span{color:var(--red)}.sub{font-size:11px;color:var(--muted);letter-spacing:2px;margin-top:6px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 8px 28px #0008}
+.label{display:block;font-size:11px;font-weight:bold;letter-spacing:1px;color:#bbb;margin:0 0 9px}
+.row{display:flex;gap:9px}.row>*{flex:1;min-width:0}
+button,select,input{font:inherit}button{cursor:pointer;border:1px solid #343434;background:#1b1b1b;color:white;border-radius:10px;padding:12px;font-weight:800}
+button.active,.primary{background:var(--red);border-color:var(--red);color:white}.choice{font-size:12px}
+input,select{width:100%;background:#090909;color:white;border:1px solid #383838;border-radius:10px;padding:13px;outline:none}
+input:focus,select:focus{border-color:var(--red)}.field{margin-bottom:15px}
+.primary{width:100%;padding:15px;font-size:14px;letter-spacing:1px;margin-top:4px}
+.small{font-size:11px;color:var(--muted);line-height:1.5}.hidden{display:none!important}
+#loading{text-align:center;padding:25px 8px} .spinner{width:38px;height:38px;border:4px solid #333;border-top-color:var(--red);border-radius:50%;margin:0 auto 15px;animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.resulthead{text-align:center;color:var(--green);font-weight:900;letter-spacing:1px;margin:3px 0 14px}
+.stat{display:flex;align-items:center;justify-content:space-between;padding:13px 2px;border-bottom:1px solid var(--line)}.stat:last-child{border:0}.stat span{font-size:13px;color:#ddd}.stat b{font-size:21px;color:var(--red2)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}.actions button{font-size:11px}
+.device-picker{position:relative;width:100%;z-index:30}
+#deviceList{display:none;position:absolute;left:0;right:0;top:calc(100% + 5px);max-height: min(45vh, 320px);overflow-y:auto;overscroll-behavior:contain;background:#171717;color:#fff;border:1px solid #FF0040;border-radius:10px;box-shadow:0 10px 28px #000e;z-index:9999;-webkit-overflow-scrolling:touch}
+#deviceList.open{display:block}
+.device-option{display:block;width:100%;text-align:left;background:#171717;color:#f5f5f5;border:0;border-bottom:1px solid #303030;border-radius:0;padding:12px;font-size:13px;font-weight:600}
+.device-option:last-child{border-bottom:0}.device-option:active,.device-option.selected{background:#3a101d;color:#fff}
+.device-empty{padding:13px;color:#aaa;font-size:12px}
+.pill{display:inline-block;border:1px solid #343434;border-radius:20px;padding:5px 9px;color:#bbb;font-size:10px;margin:3px}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <button id="snd" style="align-self:flex-end;height:36px;width:auto;padding:0 12px;font-size:11px">🔊 SONIDO: ON</button>
-  <h1>SENSI IA <span>—</span><br>CALIBRADOR</h1>
-  <p class="sub">Genera una sensibilidad base equilibrada para Free Fire según tu modelo, tu intensidad y tu estilo. Pruébala en la sala de entrenamiento y ajústala de 3 en 3.</p>
+  <header class="top"><div class="logo">SENSI <span>X IA</span></div><div class="sub">CALIBRADOR FREE FIRE</div></header>
 
-  <div class="card">
-    <div class="row c2">
-      <button id="mCON" class="on">CON DPI</button><button id="mSIN">SIN DPI</button>
+  <section class="card" id="setup">
+    <div class="field">
+      <span class="label">MODO DE CALIBRACIÓN</span>
+      <div class="row"><button class="choice active" id="con">CON DPI</button><button class="choice" id="sin">SIN DPI</button></div>
     </div>
-    <div><div class="lbl" style="margin-bottom:8px">INTENSIDAD</div>
-      <div class="row c3"><button data-i="BAJA">BAJA</button><button data-i="MEDIA" class="on">MEDIA</button><button data-i="ALTA">ALTA</button></div>
+    <div class="field">
+      <span class="label">INTENSIDAD</span>
+      <div class="row"><button class="choice" data-int="BAJA">BAJA</button><button class="choice active" data-int="MEDIA">MEDIA</button><button class="choice" data-int="ALTA">ALTA</button></div>
     </div>
-    <div style="position:relative">
-      <div class="lbl" style="margin-bottom:8px">DISPOSITIVO <span id="devInfo" style="color:var(--red2);float:right"></span></div>
-      <input id="q" placeholder="Ej: Galaxy A17, iPhone 15, Redmi Note 13" autocomplete="off">
-      <div id="list" class="list" style="display:none"></div>
+    <div class="field">
+      <span class="label">DISPOSITIVO</span>
+      <div class="device-picker">
+      <input id="device" autocomplete="off" placeholder="Escribe o selecciona tu dispositivo" aria-autocomplete="list" aria-controls="deviceList">
+      <div id="deviceList" role="listbox"></div>
+      </div>
+      <datalist id="devices">
+        <!-- MODELOS NUEVOS: NOVIEMBRE 2026 -->
+        <!-- Apple iPhone (2026) -->
+        <option>iPhone Duo</option>
+        <option>iPhone 18 Pro Max</option>
+        <option>iPhone 18 Pro</option>
+        <option>iPhone Air</option>
+        <option>iPhone 17 Pro Max</option>
+        <option>iPhone 17 Pro</option>
+        <option>iPhone 17</option>
+        <option>iPhone 17e</option>
+        <option>iPhone 16 Pro Max</option>
+        <option>iPhone 16 Pro</option>
+        <option>iPhone 16 Plus</option>
+        <option>iPhone 16</option>
+        <option>iPhone 16e</option>
+        <!-- Samsung Galaxy (2026) -->
+        <option>Galaxy S26 Ultra</option>
+        <option>Galaxy S26+</option>
+        <option>Galaxy S26</option>
+        <option>Galaxy S26 FE</option>
+        <option>Galaxy Z Fold8 Ultra</option>
+        <option>Galaxy Z Fold8</option>
+        <option>Galaxy Z Flip8</option>
+        <option>Galaxy A27</option>
+        <option>Galaxy A18</option>
+        <option>Galaxy Z TriFold</option>
+        <!-- Google Pixel (2026) -->
+        <option>Pixel 11 Pro Fold</option>
+        <option>Pixel 11 Pro XL</option>
+        <option>Pixel 11 Pro</option>
+        <option>Pixel 11</option>
+        <option>Pixel 10 Pro Fold</option>
+        <option>Pixel 10 Pro XL</option>
+        <option>Pixel 10 Pro</option>
+        <option>Pixel 10</option>
+        <option>Pixel 10a</option>
+        <!-- Xiaomi (2026) -->
+        <option>Xiaomi 18 Pro Max</option>
+        <option>Xiaomi 18 Pro</option>
+        <option>Xiaomi 17 Ultra</option>
+        <option>Xiaomi 17</option>
+        <option>Xiaomi 17T Pro</option>
+        <option>Xiaomi 17T</option>
+        <option>Xiaomi 15 Ultra</option>
+        <option>Xiaomi 15T Pro</option>
+        <option>Xiaomi 15T</option>
+        <option>Xiaomi 15</option>
+        <!-- REDMI (2026) -->
+        <option>REDMI Note 17 Pro Max 5G</option>
+        <option>REDMI Note 17 Pro 5G</option>
+        <option>REDMI Note 17 5G</option>
+        <option>REDMI Note 17</option>
+        <option>REDMI 17 5G</option>
+        <option>REDMI 17</option>
+        <option>REDMI 17C 5G</option>
+        <option>REDMI Note 15 Pro+ 5G</option>
+        <option>REDMI Note 15 Pro 5G</option>
+        <option>REDMI Note 15 Pro</option>
+        <option>REDMI Note 15 5G</option>
+        <option>REDMI Note 15</option>
+        <option>REDMI 15C 5G</option>
+        <!-- POCO (2026) -->
+        <option>POCO F9 Ultra</option>
+        <option>POCO F9 Pro</option>
+        <option>POCO F8 Ultra</option>
+        <option>POCO F8 Pro</option>
+        <option>POCO X8 Pro Max</option>
+        <option>POCO X8 Pro</option>
+        <option>POCO X8</option>
+        <option>POCO M8 Pro 5G</option>
+        <option>POCO M8 5G</option>
+        <option>POCO C95 Pro</option>
+        <!-- Motorola (2026) -->
+        <option>motorola signature 27</option>
+        <option>motorola razr fold</option>
+        <option>motorola razr 70 ultra</option>
+        <option>motorola razr 70</option>
+        <option>motorola edge 70 pro</option>
+        <option>motorola edge 70</option>
+        <!-- vivo (2026) -->
+        <option>vivo X500 Pro Max</option>
+        <option>vivo X500 Pro</option>
+        <option>vivo X500</option>
+        <option>vivo X Fold6</option>
+        <!-- OPPO (2026) -->
+        <option>OPPO Find X10 Pro Max</option>
+        <option>OPPO Find X10</option>
+        <option>OPPO Reno 17 Pro</option>
+        <option>OPPO Reno 17</option>
+        <!-- OnePlus (2026) -->
+        <option>OnePlus 16</option>
+        <!-- Huawei (2026) -->
+        <option>HUAWEI Pura 90s Pro Max</option>
+        <option>HUAWEI Pura 90s Pro</option>
+        <!-- HONOR (2026) -->
+        <option>HONOR Magic V6 5G</option>
+        <option>HONOR Magic 9</option>
+        <option>HONOR X80 Pro Max</option>
+        <!-- Apple iPhone -->
+        <option>iPhone 18 Pro Max</option>
+        <option>iPhone 18 Pro</option>
+        <option>iPhone Duo</option>
+        <option>iPhone 17 Pro Max</option>
+        <option>iPhone 17 Pro</option>
+        <option>iPhone 17 Air</option>
+        <option>iPhone 17</option>
+        <option>iPhone 17e</option>
+        <option>iPhone 16 Pro Max</option>
+        <option>iPhone 16 Pro</option>
+        <option>iPhone 16 Plus</option>
+        <option>iPhone 16</option>
+        <option>iPhone 16e</option>
+        <option>iPhone 15 Pro Max</option>
+        <option>iPhone 15 Pro</option>
+        <option>iPhone 15 Plus</option>
+        <option>iPhone 15</option>
+        <option>iPhone 14 Pro Max</option>
+        <option>iPhone 14 Pro</option>
+        <option>iPhone 14 Plus</option>
+        <option>iPhone 14</option>
+        <option>iPhone 13 Pro Max</option>
+        <option>iPhone 13 Pro</option>
+        <option>iPhone 13 mini</option>
+        <option>iPhone 13</option>
+        <option>iPhone 12 Pro Max</option>
+        <option>iPhone 12 Pro</option>
+        <option>iPhone 12 mini</option>
+        <option>iPhone 12</option>
+        <option>iPhone 11 Pro Max</option>
+        <option>iPhone 11 Pro</option>
+        <option>iPhone 11</option>
+        <option>iPhone SE 2022</option>
+        <option>iPhone XR</option>
+        <option>iPhone XS Max</option>
+        <option>iPhone XS</option>
+        <!-- Samsung Galaxy S -->
+        <option>Galaxy S26 Ultra</option>
+        <option>Galaxy S26+</option>
+        <option>Galaxy S26</option>
+        <option>Galaxy S26 FE</option>
+        <option>Galaxy S25 Ultra</option>
+        <option>Galaxy S25+</option>
+        <option>Galaxy S25</option>
+        <option>Galaxy S25 FE</option>
+        <option>Galaxy S24 Ultra</option>
+        <option>Galaxy S24+</option>
+        <option>Galaxy S24</option>
+        <option>Galaxy S24 FE</option>
+        <option>Galaxy S23 Ultra</option>
+        <option>Galaxy S23+</option>
+        <option>Galaxy S23</option>
+        <option>Galaxy S22 Ultra</option>
+        <option>Galaxy S22+</option>
+        <option>Galaxy S22</option>
+        <option>Galaxy S21 Ultra</option>
+        <option>Galaxy S21+</option>
+        <option>Galaxy S21</option>
+        <!-- Samsung Galaxy Z -->
+        <option>Galaxy Z Fold8</option>
+        <option>Galaxy Z Flip8</option>
+        <option>Galaxy Z Fold7</option>
+        <option>Galaxy Z Flip7</option>
+        <option>Galaxy Z Fold6</option>
+        <option>Galaxy Z Flip6</option>
+        <option>Galaxy Z Fold5</option>
+        <option>Galaxy Z Flip5</option>
+        <option>Galaxy Z Fold4</option>
+        <option>Galaxy Z Flip4</option>
+        <!-- Samsung Galaxy A -->
+        <option>Galaxy A57 5G</option>
+        <option>Galaxy A56 5G</option>
+        <option>Galaxy A55 5G</option>
+        <option>Galaxy A54 5G</option>
+        <option>Galaxy A53 5G</option>
+        <option>Galaxy A52s 5G</option>
+        <option>Galaxy A37 5G</option>
+        <option>Galaxy A36 5G</option>
+        <option>Galaxy A35 5G</option>
+        <option>Galaxy A34 5G</option>
+        <option>Galaxy A33 5G</option>
+        <option>Galaxy A26 5G</option>
+        <option>Galaxy A25 5G</option>
+        <option>Galaxy A24</option>
+        <option>Galaxy A17 5G</option>
+        <option>Galaxy A16 5G</option>
+        <option>Galaxy A15 5G</option>
+        <option>Galaxy A14 5G</option>
+        <option>Galaxy A08</option>
+        <option>Galaxy A07</option>
+        <!-- Samsung Galaxy M/F -->
+        <option>Galaxy M56 5G</option>
+        <option>Galaxy M55 5G</option>
+        <option>Galaxy M54 5G</option>
+        <option>Galaxy M53 5G</option>
+        <option>Galaxy M35 5G</option>
+        <option>Galaxy M34 5G</option>
+        <option>Galaxy M33 5G</option>
+        <option>Galaxy M15 5G</option>
+        <option>Galaxy M14 5G</option>
+        <option>Galaxy F55 5G</option>
+        <option>Galaxy F54 5G</option>
+        <option>Galaxy F34 5G</option>
+        <option>Galaxy F15 5G</option>
+        <!-- Xiaomi -->
+        <option>Xiaomi 17 Ultra</option>
+        <option>Xiaomi 17 Pro Max</option>
+        <option>Xiaomi 17 Pro</option>
+        <option>Xiaomi 17</option>
+        <option>Xiaomi 15 Ultra</option>
+        <option>Xiaomi 15T Pro</option>
+        <option>Xiaomi 15T</option>
+        <option>Xiaomi 15</option>
+        <option>Xiaomi 14 Ultra</option>
+        <option>Xiaomi 14</option>
+        <option>Xiaomi 13T Pro</option>
+        <option>Xiaomi 13T</option>
+        <option>Xiaomi 13 Pro</option>
+        <option>Xiaomi 13</option>
+        <option>Xiaomi 12T Pro</option>
+        <option>Xiaomi 12T</option>
+        <option>Xiaomi 12 Pro</option>
+        <option>Xiaomi 12</option>
+        <!-- Redmi Note -->
+        <option>Redmi Note 17 Pro+ 5G</option>
+        <option>Redmi Note 17 Pro 5G</option>
+        <option>Redmi Note 17 5G</option>
+        <option>Redmi Note 17 4G</option>
+        <option>Redmi Note 15 Pro+ 5G</option>
+        <option>Redmi Note 15 Pro 5G</option>
+        <option>Redmi Note 15 5G</option>
+        <option>Redmi Note 14 Pro+ 5G</option>
+        <option>Redmi Note 14 Pro 5G</option>
+        <option>Redmi Note 14 5G</option>
+        <option>Redmi Note 13 Pro+ 5G</option>
+        <option>Redmi Note 13 Pro 5G</option>
+        <option>Redmi Note 13 5G</option>
+        <option>Redmi Note 12 Pro+ 5G</option>
+        <option>Redmi Note 12 Pro 5G</option>
+        <option>Redmi Note 12 5G</option>
+        <option>Redmi Note 11 Pro 5G</option>
+        <option>Redmi Note 11</option>
+        <!-- Redmi -->
+        <option>Redmi 15C</option>
+        <option>Redmi 15</option>
+        <option>Redmi 14C</option>
+        <option>Redmi 13C</option>
+        <option>Redmi 13</option>
+        <option>Redmi 12C</option>
+        <option>Redmi 12</option>
+        <option>Redmi A5</option>
+        <option>Redmi A3</option>
+        <option>Redmi 10</option>
+        <!-- POCO F -->
+        <option>POCO F9 Ultra</option>
+        <option>POCO F9 Pro</option>
+        <option>POCO F8 Ultra</option>
+        <option>POCO F8 Pro</option>
+        <option>POCO F7 Ultra</option>
+        <option>POCO F7 Pro</option>
+        <option>POCO F7</option>
+        <option>POCO F6 Pro</option>
+        <option>POCO F6</option>
+        <option>POCO F5 Pro</option>
+        <option>POCO F5</option>
+        <!-- POCO X -->
+        <option>POCO X8 Pro</option>
+        <option>POCO X8</option>
+        <option>POCO X7 Pro</option>
+        <option>POCO X7</option>
+        <option>POCO X6 Pro</option>
+        <option>POCO X6</option>
+        <option>POCO X5 Pro</option>
+        <option>POCO X5</option>
+        <option>POCO X4 GT</option>
+        <option>POCO X3 Pro</option>
+        <!-- POCO M/C -->
+        <option>POCO M8 Pro</option>
+        <option>POCO M7 Pro 5G</option>
+        <option>POCO M6 Pro</option>
+        <option>POCO M6</option>
+        <option>POCO M5</option>
+        <option>POCO C85</option>
+        <option>POCO C75</option>
+        <option>POCO C65</option>
+        <option>POCO C55</option>
+        <!-- Motorola Edge -->
+        <option>Motorola Edge 70 Plus</option>
+        <option>Motorola Edge 70 Fusion</option>
+        <option>Motorola Edge 70</option>
+        <option>Motorola Edge 60 Pro</option>
+        <option>Motorola Edge 60 Fusion</option>
+        <option>Motorola Edge 60</option>
+        <option>Motorola Edge 50 Ultra</option>
+        <option>Motorola Edge 50 Pro</option>
+        <option>Motorola Edge 50 Fusion</option>
+        <option>Motorola Edge 50 Neo</option>
+        <option>Motorola Edge 40 Pro</option>
+        <option>Motorola Edge 40 Neo</option>
+        <!-- Motorola Moto G -->
+        <option>Moto G Max 5G</option>
+        <option>Moto G86 5G</option>
+        <option>Moto G77 5G</option>
+        <option>Moto G67 5G</option>
+        <option>Moto G56 5G</option>
+        <option>Moto G47 5G</option>
+        <option>Moto G37</option>
+        <option>Moto G Stylus 5G 2025</option>
+        <option>Moto G Power 2025</option>
+        <option>Moto G85</option>
+        <option>Moto G84</option>
+        <option>Moto G75</option>
+        <option>Moto G54</option>
+        <option>Moto G34</option>
+        <option>Moto G24</option>
+        <option>Moto G14</option>
+        <option>Moto G13</option>
+        <!-- Motorola Razr -->
+        <option>Motorola Razr 70 Ultra</option>
+        <option>Motorola Razr 70</option>
+        <option>Motorola Razr 60 Ultra</option>
+        <option>Motorola Razr 60</option>
+        <option>Motorola Razr 50 Ultra</option>
+        <option>Motorola Razr 50</option>
+        <!-- Google Pixel -->
+        <option>Pixel 11 Pro XL</option>
+        <option>Pixel 11 Pro Fold</option>
+        <option>Pixel 11 Pro</option>
+        <option>Pixel 11</option>
+        <option>Pixel 10 Pro XL</option>
+        <option>Pixel 10 Pro</option>
+        <option>Pixel 10</option>
+        <option>Pixel 10a</option>
+        <option>Pixel 9 Pro XL</option>
+        <option>Pixel 9 Pro</option>
+        <option>Pixel 9</option>
+        <option>Pixel 9a</option>
+        <option>Pixel 8 Pro</option>
+        <option>Pixel 8</option>
+        <option>Pixel 8a</option>
+        <option>Pixel 7 Pro</option>
+        <option>Pixel 7</option>
+        <option>Pixel 7a</option>
+        <!-- Infinix GT -->
+        <option>Infinix GT 30 Pro 5G</option>
+        <option>Infinix GT 20 Pro 5G</option>
+        <option>Infinix GT 10 Pro</option>
+        <!-- Infinix Note -->
+        <option>Infinix Note 60 Pro</option>
+        <option>Infinix Note 50 Pro+ 5G</option>
+        <option>Infinix Note 50 Pro</option>
+        <option>Infinix Note 50</option>
+        <option>Infinix Note 40 Pro+ 5G</option>
+        <option>Infinix Note 40 Pro</option>
+        <option>Infinix Note 40</option>
+        <!-- Infinix Hot/Zero -->
+        <option>Infinix Hot 60 Pro+</option>
+        <option>Infinix Hot 60 Pro</option>
+        <option>Infinix Hot 50 Pro+</option>
+        <option>Infinix Hot 50</option>
+        <option>Infinix Zero 40 5G</option>
+        <option>Infinix Zero 30 5G</option>
+        <!-- Tecno Camon -->
+        <option>TECNO Camon 50 Pro</option>
+        <option>TECNO Camon 50</option>
+        <option>TECNO Camon 40 Pro 5G</option>
+        <option>TECNO Camon 40</option>
+        <option>TECNO Camon 30 Premier 5G</option>
+        <option>TECNO Camon 30 Pro</option>
+        <!-- Tecno Spark/Phantom -->
+        <option>TECNO Spark 40 Pro+</option>
+        <option>TECNO Spark 40 Pro</option>
+        <option>TECNO Spark 40</option>
+        <option>TECNO Spark Go 2</option>
+        <option>TECNO Spark 30 Pro</option>
+        <option>TECNO Phantom V Fold2 5G</option>
+        <option>TECNO Phantom V Flip2</option>
+        <!-- realme GT -->
+        <option>realme GT 8 Pro</option>
+        <option>realme GT 8</option>
+        <option>realme GT 7 Pro</option>
+        <option>realme GT 7</option>
+        <option>realme GT 6</option>
+        <option>realme GT 5 Pro</option>
+        <!-- realme Number -->
+        <option>realme 14 Pro+ 5G</option>
+        <option>realme 14 Pro 5G</option>
+        <option>realme 14 5G</option>
+        <option>realme 13 Pro+ 5G</option>
+        <option>realme 13 Pro 5G</option>
+        <option>realme 13+ 5G</option>
+        <option>realme 12 Pro+ 5G</option>
+        <option>realme 12 Pro 5G</option>
+        <option>realme 12 5G</option>
+        <!-- realme C/P -->
+        <option>realme P3 Pro 5G</option>
+        <option>realme P3 5G</option>
+        <option>realme C75</option>
+        <option>realme C65</option>
+        <option>realme C55</option>
+        <option>realme C53</option>
+        <option>realme Narzo 70 Pro</option>
+        <option>realme Narzo 60 Pro</option>
+        <!-- OPPO Find/Reno -->
+        <option>OPPO Find X9 Ultra</option>
+        <option>OPPO Find X9 Pro</option>
+        <option>OPPO Find X9</option>
+        <option>OPPO Find X8 Pro</option>
+        <option>OPPO Find N5</option>
+        <option>OPPO Reno 16 Pro</option>
+        <option>OPPO Reno 16F</option>
+        <option>OPPO Reno 15 Pro</option>
+        <option>OPPO Reno 13 Pro 5G</option>
+        <option>OPPO Reno 12 Pro 5G</option>
+        <option>OPPO Reno 11 Pro</option>
+        <!-- OPPO A -->
+        <option>OPPO A6 Pro 5G</option>
+        <option>OPPO A5 Pro 5G</option>
+        <option>OPPO A5 5G</option>
+        <option>OPPO A3 Pro 5G</option>
+        <option>OPPO A3 5G</option>
+        <option>OPPO A79 5G</option>
+        <option>OPPO A60</option>
+        <option>OPPO A58</option>
+        <!-- vivo X -->
+        <option>vivo X300 Pro</option>
+        <option>vivo X300</option>
+        <option>vivo X200 Pro</option>
+        <option>vivo X200 FE</option>
+        <option>vivo X100 Pro</option>
+        <option>vivo X100</option>
+        <!-- vivo V/Y -->
+        <option>vivo V60</option>
+        <option>vivo V50</option>
+        <option>vivo V40 5G</option>
+        <option>vivo V30</option>
+        <option>vivo Y300 Pro</option>
+        <option>vivo Y200</option>
+        <option>vivo Y100</option>
+        <option>vivo Y29 5G</option>
+        <!-- OnePlus -->
+        <option>OnePlus 16</option>
+        <option>OnePlus 15T</option>
+        <option>OnePlus 15</option>
+        <option>OnePlus 13</option>
+        <option>OnePlus 13R</option>
+        <option>OnePlus 12</option>
+        <option>OnePlus 12R</option>
+        <option>OnePlus Nord 5</option>
+        <option>OnePlus Nord 4</option>
+        <option>OnePlus Nord CE5</option>
+        <option>OnePlus Open</option>
+        <!-- HONOR Magic -->
+        <option>HONOR Magic8 Pro</option>
+        <option>HONOR Magic8</option>
+        <option>HONOR Magic7 Pro</option>
+        <option>HONOR Magic7</option>
+        <option>HONOR Magic V5</option>
+        <option>HONOR Magic6 Pro</option>
+        <option>HONOR Magic V3</option>
+        <!-- HONOR Number/X -->
+        <option>HONOR 600 Pro</option>
+        <option>HONOR 500</option>
+        <option>HONOR 400 Pro</option>
+        <option>HONOR 400</option>
+        <option>HONOR 200 Pro</option>
+        <option>HONOR 200</option>
+        <option>HONOR X9c</option>
+        <option>HONOR X8c</option>
+        <option>HONOR X7c</option>
+        <option>HONOR X6b</option>
+        <!-- Huawei Mate -->
+        <option>HUAWEI Mate 80 Pro</option>
+        <option>HUAWEI Mate 80</option>
+        <option>HUAWEI Mate 70 Pro</option>
+        <option>HUAWEI Mate 70</option>
+        <option>HUAWEI Mate X6</option>
+        <option>HUAWEI Mate X5</option>
+        <!-- Huawei Pura/Nova -->
+        <option>HUAWEI Pura 80 Ultra</option>
+        <option>HUAWEI Pura 80 Pro</option>
+        <option>HUAWEI Pura 70 Ultra</option>
+        <option>HUAWEI nova 14 Pro</option>
+        <option>HUAWEI nova 13</option>
+        <option>HUAWEI nova 12</option>
+        <!-- ASUS ROG -->
+        <option>ROG Phone 10 Pro</option>
+        <option>ROG Phone 9 Pro</option>
+        <option>ROG Phone 9</option>
+        <option>ROG Phone 9 FE</option>
+        <option>ROG Phone 8 Pro</option>
+        <option>ROG Phone 8</option>
+        <!-- ASUS Zenfone -->
+        <option>Zenfone 12 Ultra</option>
+        <option>Zenfone 11 Ultra</option>
+        <option>Zenfone 10</option>
+        <!-- Sony Xperia -->
+        <option>Sony Xperia 1 VIII</option>
+        <option>Sony Xperia 10 VIII</option>
+        <option>Sony Xperia 1 VII</option>
+        <option>Sony Xperia 10 VII</option>
+        <option>Sony Xperia 1 VI</option>
+        <option>Sony Xperia 5 V</option>
+        <!-- Nothing -->
+        <option>Nothing Phone (4a) Pro</option>
+        <option>Nothing Phone (4a)</option>
+        <option>Nothing Phone (3)</option>
+        <option>Nothing Phone (3a) Pro</option>
+        <option>Nothing Phone (3a)</option>
+        <option>Nothing Phone (2a) Plus</option>
+        <option>Nothing Phone (2a)</option>
+        <!-- ZTE Nubia -->
+        <option>nubia Z80 Ultra</option>
+        <option>nubia Z70 Ultra</option>
+        <option>nubia Z60 Ultra</option>
+        <option>nubia Neo 3 GT</option>
+        <option>nubia Neo 2 5G</option>
+        <!-- RedMagic -->
+        <option>REDMAGIC 11 Pro</option>
+        <option>REDMAGIC 10 Pro</option>
+        <option>REDMAGIC 10S Pro</option>
+        <option>REDMAGIC 9 Pro</option>
+        <!-- TCL -->
+        <option>TCL 60 Pro</option>
+        <option>TCL 60</option>
+        <option>TCL 50 Pro NXTPAPER</option>
+        <option>TCL 50 5G</option>
+        <!-- Nokia/HMD -->
+        <option>HMD Skyline</option>
+        <option>HMD Fusion</option>
+        <option>Nokia G60 5G</option>
+        <option>Nokia X30 5G</option>
+        <option>Nokia G42 5G</option>
+        <!-- Lenovo -->
+        <option>Lenovo Legion Y70</option>
+        <option>Lenovo Legion Phone Duel 2</option>
+        <!-- Fairphone -->
+        <option>Fairphone 6+</option>
+        <option>Fairphone 6</option>
+        <option>Fairphone 5</option>
+        <!-- Sharp -->
+        <option>Sharp AQUOS R11</option>
+        <option>Sharp AQUOS R10</option>
+        <option>Sharp AQUOS sense10</option>
+        <!-- Meizu -->
+        <option>Meizu 22</option>
+        <option>Meizu 21 Pro</option>
+        <option>Meizu 21</option>
+        <!-- Jolla -->
+        <option>Jolla Phone</option>
+        <!-- Tablets Apple -->
+        <option>iPad Pro 13 M5</option>
+        <option>iPad Pro 11 M5</option>
+        <option>iPad Air 13 M4</option>
+        <option>iPad Air 11 M4</option>
+        <option>iPad mini A17 Pro</option>
+        <option>iPad 11th Gen</option>
+        <!-- Tablets Samsung -->
+        <option>Galaxy Tab S11 Ultra</option>
+        <option>Galaxy Tab S11+</option>
+        <option>Galaxy Tab S11</option>
+        <option>Galaxy Tab S10 Ultra</option>
+        <option>Galaxy Tab S10+</option>
+        <option>Galaxy Tab S9 Ultra</option>
+        <option>Galaxy Tab S9+</option>
+        <!-- Tablets Xiaomi/Redmi -->
+        <option>Xiaomi Pad 8 Pro</option>
+        <option>Xiaomi Pad 8</option>
+        <option>Xiaomi Pad 7 Pro</option>
+        <option>Xiaomi Pad 7</option>
+        <option>Redmi Pad Pro</option>
+        <option>Redmi Pad SE</option>
+        <!-- Tablets Lenovo/Huawei -->
+        <option>Lenovo Legion Tab Gen 4</option>
+        <option>Lenovo Tab P12</option>
+        <option>HUAWEI MatePad Pro 13.2</option>
+        <option>HUAWEI MatePad 12 X</option>
+      
+        <!-- MODELOS 2019–2024: COMPATIBLES SEGÚN SISTEMA Y REQUISITOS DEL JUEGO -->
+        <!-- Apple iPhone 2019–2024 -->
+        <option>iPhone SE 2020</option>
+        <!-- Samsung Galaxy S 2019–2024 -->
+        <option>Galaxy S10+</option>
+        <option>Galaxy S10</option>
+        <option>Galaxy S10e</option>
+        <option>Galaxy S10 Lite</option>
+        <option>Galaxy S20 Ultra</option>
+        <option>Galaxy S20+</option>
+        <option>Galaxy S20</option>
+        <option>Galaxy S20 FE</option>
+        <option>Galaxy S21 FE</option>
+        <option>Galaxy S23 FE</option>
+        <!-- Samsung Galaxy A 2019–2024 -->
+        <option>Galaxy A10</option>
+        <option>Galaxy A10s</option>
+        <option>Galaxy A20</option>
+        <option>Galaxy A20s</option>
+        <option>Galaxy A30</option>
+        <option>Galaxy A30s</option>
+        <option>Galaxy A40</option>
+        <option>Galaxy A50</option>
+        <option>Galaxy A50s</option>
+        <option>Galaxy A51</option>
+        <option>Galaxy A70</option>
+        <option>Galaxy A70s</option>
+        <option>Galaxy A71</option>
+        <option>Galaxy A01</option>
+        <option>Galaxy A02</option>
+        <option>Galaxy A03</option>
+        <option>Galaxy A03s</option>
+        <option>Galaxy A04</option>
+        <option>Galaxy A04s</option>
+        <option>Galaxy A11</option>
+        <option>Galaxy A12</option>
+        <option>Galaxy A13</option>
+        <option>Galaxy A14</option>
+        <option>Galaxy A21s</option>
+        <option>Galaxy A22</option>
+        <option>Galaxy A23</option>
+        <option>Galaxy A31</option>
+        <option>Galaxy A32</option>
+        <option>Galaxy A41</option>
+        <option>Galaxy A42 5G</option>
+        <option>Galaxy A52</option>
+        <option>Galaxy A52 5G</option>
+        <option>Galaxy A60</option>
+        <option>Galaxy A80</option>
+        <option>Galaxy A90 5G</option>
+        <option>Galaxy A15</option>
+        <option>Galaxy A16</option>
+        <!-- Samsung Galaxy M y F 2019–2024 -->
+        <option>Galaxy M10</option>
+        <option>Galaxy M20</option>
+        <option>Galaxy M30</option>
+        <option>Galaxy M30s</option>
+        <option>Galaxy M31</option>
+        <option>Galaxy M31s</option>
+        <option>Galaxy M11</option>
+        <option>Galaxy M12</option>
+        <option>Galaxy M21</option>
+        <option>Galaxy M22</option>
+        <option>Galaxy M32</option>
+        <option>Galaxy M32 5G</option>
+        <option>Galaxy M51</option>
+        <option>Galaxy M52 5G</option>
+        <option>Galaxy M23 5G</option>
+        <option>Galaxy F12</option>
+        <option>Galaxy F22</option>
+        <option>Galaxy F23 5G</option>
+        <!-- Samsung Galaxy Note y plegables 2019–2024 -->
+        <option>Galaxy Note10+</option>
+        <option>Galaxy Note10</option>
+        <option>Galaxy Note10 Lite</option>
+        <option>Galaxy Note20 Ultra</option>
+        <option>Galaxy Note20</option>
+        <option>Galaxy Z Fold2</option>
+        <option>Galaxy Z Fold3</option>
+        <option>Galaxy Z Flip</option>
+        <option>Galaxy Z Flip3</option>
+        <!-- Xiaomi Mi y Xiaomi 2019–2024 -->
+        <option>Mi 9</option>
+        <option>Mi 9T</option>
+        <option>Mi 9T Pro</option>
+        <option>Mi 9 Lite</option>
+        <option>Mi Note 10</option>
+        <option>Mi Note 10 Pro</option>
+        <option>Mi 10</option>
+        <option>Mi 10 Pro</option>
+        <option>Mi 10T</option>
+        <option>Mi 10T Pro</option>
+        <option>Mi 10 Lite</option>
+        <option>Mi 10i</option>
+        <option>Mi 11</option>
+        <option>Mi 11 Lite</option>
+        <option>Mi 11 Lite 5G</option>
+        <option>Mi 11i</option>
+        <option>Mi 11T</option>
+        <option>Mi 11T Pro</option>
+        <option>Xiaomi 12X</option>
+        <option>Xiaomi 12 Lite</option>
+        <option>Xiaomi 13 Lite</option>
+        <option>Xiaomi 14 Pro</option>
+        <option>Xiaomi 14T</option>
+        <option>Xiaomi 14T Pro</option>
+        <!-- Redmi 2019–2024 -->
+        <option>Redmi 7</option>
+        <option>Redmi 7A</option>
+        <option>Redmi 8</option>
+        <option>Redmi 8A</option>
+        <option>Redmi 9</option>
+        <option>Redmi 9A</option>
+        <option>Redmi 9C</option>
+        <option>Redmi 9T</option>
+        <option>Redmi 10A</option>
+        <option>Redmi 10C</option>
+        <option>Redmi Note 7</option>
+        <option>Redmi Note 7 Pro</option>
+        <option>Redmi Note 8</option>
+        <option>Redmi Note 8 Pro</option>
+        <option>Redmi Note 8T</option>
+        <option>Redmi Note 9</option>
+        <option>Redmi Note 9S</option>
+        <option>Redmi Note 9 Pro</option>
+        <option>Redmi Note 9 Pro Max</option>
+        <option>Redmi Note 10</option>
+        <option>Redmi Note 10S</option>
+        <option>Redmi Note 10 Pro</option>
+        <option>Redmi Note 10 5G</option>
+        <option>Redmi Note 11S</option>
+        <option>Redmi Note 11 Pro</option>
+        <option>Redmi Note 12</option>
+        <option>Redmi Note 12S</option>
+        <option>Redmi Note 12 Pro</option>
+        <option>Redmi Note 13</option>
+        <option>Redmi Note 13 Pro</option>
+        <option>Redmi Note 14</option>
+        <option>Redmi Note 14 Pro</option>
+        <!-- POCO 2019–2024 -->
+        <option>POCO F1</option>
+        <option>POCO X2</option>
+        <option>POCO M2</option>
+        <option>POCO M2 Pro</option>
+        <option>POCO X3</option>
+        <option>POCO X3 NFC</option>
+        <option>POCO F2 Pro</option>
+        <option>POCO M3</option>
+        <option>POCO M3 Pro 5G</option>
+        <option>POCO F3</option>
+        <option>POCO X3 GT</option>
+        <option>POCO M4 Pro</option>
+        <option>POCO M4 Pro 5G</option>
+        <option>POCO X4 Pro 5G</option>
+        <option>POCO F4</option>
+        <option>POCO F4 GT</option>
+        <option>POCO M5s</option>
+        <option>POCO X5 Pro 5G</option>
+        <!-- Motorola Moto G y E 2019–2024 -->
+        <option>Moto G7</option>
+        <option>Moto G7 Play</option>
+        <option>Moto G7 Power</option>
+        <option>Moto G7 Plus</option>
+        <option>Moto G8</option>
+        <option>Moto G8 Power</option>
+        <option>Moto G8 Plus</option>
+        <option>Moto G9 Play</option>
+        <option>Moto G9 Plus</option>
+        <option>Moto G9 Power</option>
+        <option>Moto G10</option>
+        <option>Moto G20</option>
+        <option>Moto G30</option>
+        <option>Moto G31</option>
+        <option>Moto G32</option>
+        <option>Moto G41</option>
+        <option>Moto G50</option>
+        <option>Moto G60</option>
+        <option>Moto G60s</option>
+        <option>Moto G71 5G</option>
+        <option>Moto G82 5G</option>
+        <option>Moto G100</option>
+        <option>Moto G200</option>
+        <option>Moto G22</option>
+        <option>Moto G23</option>
+        <option>Moto G24 Power</option>
+        <option>Moto G42</option>
+        <option>Moto G52</option>
+        <option>Moto G53 5G</option>
+        <option>Moto G54 5G</option>
+        <option>Moto G62 5G</option>
+        <option>Moto G72</option>
+        <option>Moto G73 5G</option>
+        <option>Moto G84 5G</option>
+        <option>Moto E6</option>
+        <option>Moto E6 Plus</option>
+        <option>Moto E7</option>
+        <option>Moto E7 Plus</option>
+        <option>Moto E20</option>
+        <option>Moto E22</option>
+        <option>Moto E32</option>
+        <option>Moto E40</option>
+        <!-- Motorola Edge y Razr 2019–2024 -->
+        <option>Motorola Edge</option>
+        <option>Motorola Edge+</option>
+        <option>Motorola Edge 20</option>
+        <option>Motorola Edge 20 Pro</option>
+        <option>Motorola Edge 20 Lite</option>
+        <option>Motorola Edge 30</option>
+        <option>Motorola Edge 30 Pro</option>
+        <option>Motorola Edge 30 Fusion</option>
+        <option>Motorola Edge 30 Neo</option>
+        <option>Motorola Edge 40</option>
+        <option>Motorola Edge 50</option>
+        <option>Motorola Razr 2019</option>
+        <option>Motorola Razr 5G</option>
+        <option>Motorola Razr 40</option>
+        <option>Motorola Razr 40 Ultra</option>
+        <!-- Google Pixel 2019–2024 -->
+        <option>Pixel 3a</option>
+        <option>Pixel 3a XL</option>
+        <option>Pixel 4</option>
+        <option>Pixel 4 XL</option>
+        <option>Pixel 4a</option>
+        <option>Pixel 4a 5G</option>
+        <option>Pixel 5</option>
+        <option>Pixel 5a</option>
+        <option>Pixel 6</option>
+        <option>Pixel 6 Pro</option>
+        <option>Pixel 6a</option>
+        <option>Pixel 9 Pro Fold</option>
+        <!-- OnePlus 2019–2024 -->
+        <option>OnePlus 7</option>
+        <option>OnePlus 7 Pro</option>
+        <option>OnePlus 7T</option>
+        <option>OnePlus 7T Pro</option>
+        <option>OnePlus 8</option>
+        <option>OnePlus 8 Pro</option>
+        <option>OnePlus 8T</option>
+        <option>OnePlus Nord</option>
+        <option>OnePlus Nord N10 5G</option>
+        <option>OnePlus Nord N100</option>
+        <option>OnePlus 9</option>
+        <option>OnePlus 9 Pro</option>
+        <option>OnePlus 9R</option>
+        <option>OnePlus Nord 2</option>
+        <option>OnePlus Nord CE</option>
+        <option>OnePlus 10 Pro</option>
+        <option>OnePlus 10T</option>
+        <option>OnePlus 10R</option>
+        <option>OnePlus Nord 2T</option>
+        <option>OnePlus Nord CE 2</option>
+        <option>OnePlus 11</option>
+        <option>OnePlus 11R</option>
+        <option>OnePlus Nord 3</option>
+        <option>OnePlus Nord CE 3 Lite</option>
+        <option>OnePlus Nord CE4</option>
+        <!-- realme 2019–2024 -->
+        <option>realme 3</option>
+        <option>realme 3 Pro</option>
+        <option>realme 5</option>
+        <option>realme 5 Pro</option>
+        <option>realme 5i</option>
+        <option>realme 6</option>
+        <option>realme 6 Pro</option>
+        <option>realme 7</option>
+        <option>realme 7 Pro</option>
+        <option>realme 8</option>
+        <option>realme 8 Pro</option>
+        <option>realme 8 5G</option>
+        <option>realme 9</option>
+        <option>realme 9 Pro</option>
+        <option>realme 9 Pro+</option>
+        <option>realme 9i</option>
+        <option>realme 10</option>
+        <option>realme 10 Pro</option>
+        <option>realme 10 Pro+</option>
+        <option>realme 11</option>
+        <option>realme 11 Pro</option>
+        <option>realme 11 Pro+</option>
+        <option>realme 12</option>
+        <option>realme 12+ 5G</option>
+        <option>realme 12 Pro</option>
+        <option>realme 12 Pro+</option>
+        <option>realme 13</option>
+        <option>realme 13 Pro</option>
+        <option>realme 13 Pro+</option>
+        <option>realme C3</option>
+        <option>realme C11</option>
+        <option>realme C15</option>
+        <option>realme C21</option>
+        <option>realme C25</option>
+        <option>realme C30</option>
+        <option>realme C33</option>
+        <option>realme C35</option>
+        <option>realme C51</option>
+        <option>realme C67</option>
+        <option>realme C series</option>
+        <!-- OPPO 2019–2024 -->
+        <option>OPPO Find X2</option>
+        <option>OPPO Find X2 Pro</option>
+        <option>OPPO Find X3 Pro</option>
+        <option>OPPO Find X5</option>
+        <option>OPPO Find X5 Pro</option>
+        <option>OPPO Find X6 Pro</option>
+        <option>OPPO Find X7 Ultra</option>
+        <option>OPPO Find N</option>
+        <option>OPPO Find N2 Flip</option>
+        <option>OPPO Find N3 Flip</option>
+        <option>OPPO Reno2</option>
+        <option>OPPO Reno2 F</option>
+        <option>OPPO Reno3</option>
+        <option>OPPO Reno3 Pro</option>
+        <option>OPPO Reno4</option>
+        <option>OPPO Reno4 Pro</option>
+        <option>OPPO Reno5</option>
+        <option>OPPO Reno5 Pro</option>
+        <option>OPPO Reno6</option>
+        <option>OPPO Reno6 Pro</option>
+        <option>OPPO Reno7</option>
+        <option>OPPO Reno7 Pro</option>
+        <option>OPPO Reno8</option>
+        <option>OPPO Reno8 Pro</option>
+        <option>OPPO Reno9</option>
+        <option>OPPO Reno9 Pro+</option>
+        <option>OPPO Reno10</option>
+        <option>OPPO Reno10 Pro+</option>
+        <option>OPPO Reno11</option>
+        <option>OPPO Reno11 Pro</option>
+        <option>OPPO Reno12</option>
+        <option>OPPO Reno12 Pro</option>
+        <option>OPPO A5 2020</option>
+        <option>OPPO A9 2020</option>
+        <option>OPPO A15</option>
+        <option>OPPO A16</option>
+        <option>OPPO A17</option>
+        <option>OPPO A31</option>
+        <option>OPPO A53</option>
+        <option>OPPO A54</option>
+        <option>OPPO A55</option>
+        <option>OPPO A57</option>
+        <option>OPPO A74</option>
+        <option>OPPO A76</option>
+        <option>OPPO A77</option>
+        <option>OPPO A78</option>
+        <option>OPPO A79</option>
+        <!-- vivo 2019–2024 -->
+        <option>vivo V15</option>
+        <option>vivo V17</option>
+        <option>vivo V19</option>
+        <option>vivo V20</option>
+        <option>vivo V20 Pro</option>
+        <option>vivo V21</option>
+        <option>vivo V21e</option>
+        <option>vivo V23</option>
+        <option>vivo V23e</option>
+        <option>vivo V25</option>
+        <option>vivo V25 Pro</option>
+        <option>vivo V27</option>
+        <option>vivo V27 Pro</option>
+        <option>vivo V29</option>
+        <option>vivo V29 Pro</option>
+        <option>vivo V30 Pro</option>
+        <option>vivo V40</option>
+        <option>vivo V40 Pro</option>
+        <option>vivo X50</option>
+        <option>vivo X50 Pro</option>
+        <option>vivo X60</option>
+        <option>vivo X60 Pro</option>
+        <option>vivo X70 Pro</option>
+        <option>vivo X80 Pro</option>
+        <option>vivo X90 Pro</option>
+        <option>vivo Y11</option>
+        <option>vivo Y12</option>
+        <option>vivo Y15</option>
+        <option>vivo Y20</option>
+        <option>vivo Y21</option>
+        <option>vivo Y22</option>
+        <option>vivo Y27</option>
+        <option>vivo Y33s</option>
+        <option>vivo Y35</option>
+        <option>vivo Y36</option>
+        <option>vivo Y55</option>
+        <option>vivo Y series</option>
+        <!-- Huawei 2019–2024 -->
+        <option>Huawei P30</option>
+        <option>Huawei P30 Pro</option>
+        <option>Huawei P30 Lite</option>
+        <option>Huawei P40</option>
+        <option>Huawei P40 Pro</option>
+        <option>Huawei P40 Lite</option>
+        <option>Huawei Mate 30</option>
+        <option>Huawei Mate 30 Pro</option>
+        <option>Huawei Mate 40 Pro</option>
+        <option>Huawei Mate 50 Pro</option>
+        <option>Huawei P50</option>
+        <option>Huawei P50 Pro</option>
+        <option>Huawei P50 Pocket</option>
+        <option>Huawei P60 Pro</option>
+        <option>Huawei nova 5T</option>
+        <option>Huawei nova 7i</option>
+        <option>Huawei nova 8i</option>
+        <option>Huawei nova 9</option>
+        <option>Huawei nova 9 SE</option>
+        <option>Huawei nova 10</option>
+        <option>Huawei nova 10 Pro</option>
+        <option>Huawei nova 11</option>
+        <option>Huawei nova 11 Pro</option>
+        <option>Huawei nova 12s</option>
+        <!-- HONOR 2019–2024 -->
+        <option>HONOR 9X</option>
+        <option>HONOR 20</option>
+        <option>HONOR 20 Pro</option>
+        <option>HONOR 30</option>
+        <option>HONOR 30 Pro</option>
+        <option>HONOR 50</option>
+        <option>HONOR 50 Lite</option>
+        <option>HONOR 60</option>
+        <option>HONOR 70</option>
+        <option>HONOR 80</option>
+        <option>HONOR 80 Pro</option>
+        <option>HONOR 90</option>
+        <option>HONOR 90 Lite</option>
+        <option>HONOR 100</option>
+        <option>HONOR 100 Pro</option>
+        <option>HONOR Magic3 Pro</option>
+        <option>HONOR Magic4 Pro</option>
+        <option>HONOR Magic5 Pro</option>
+        <option>HONOR X7</option>
+        <option>HONOR X8</option>
+        <option>HONOR X9</option>
+        <option>HONOR X9a</option>
+        <option>HONOR X9b</option>
+        <option>HONOR X6</option>
+        <option>HONOR X6a</option>
+        <option>HONOR X7a</option>
+        <option>HONOR X8a</option>
+        <!-- Infinix 2019–2024 -->
+        <option>Infinix Zero 8</option>
+        <option>Infinix Zero X Pro</option>
+        <option>Infinix Zero 5G</option>
+        <option>Infinix Zero 20</option>
+        <option>Infinix Note 7</option>
+        <option>Infinix Note 8</option>
+        <option>Infinix Note 10 Pro</option>
+        <option>Infinix Note 11 Pro</option>
+        <option>Infinix Note 12</option>
+        <option>Infinix Note 12 VIP</option>
+        <option>Infinix Note 30</option>
+        <option>Infinix Note 30 Pro</option>
+        <option>Infinix Note 30 VIP</option>
+        <option>Infinix Hot 9</option>
+        <option>Infinix Hot 10</option>
+        <option>Infinix Hot 11</option>
+        <option>Infinix Hot 12</option>
+        <option>Infinix Hot 20</option>
+        <option>Infinix Hot 30</option>
+        <option>Infinix Hot 40</option>
+        <!-- TECNO 2019–2024 -->
+        <option>TECNO Camon 12</option>
+        <option>TECNO Camon 15</option>
+        <option>TECNO Camon 16</option>
+        <option>TECNO Camon 17</option>
+        <option>TECNO Camon 18</option>
+        <option>TECNO Camon 19</option>
+        <option>TECNO Camon 20</option>
+        <option>TECNO Camon 20 Pro</option>
+        <option>TECNO Camon 30</option>
+        <option>TECNO Pova</option>
+        <option>TECNO Pova 2</option>
+        <option>TECNO Pova 3</option>
+        <option>TECNO Pova 4</option>
+        <option>TECNO Pova 5</option>
+        <option>TECNO Pova 5 Pro</option>
+        <option>TECNO Pova 6</option>
+        <option>TECNO Pova 6 Pro</option>
+        <option>TECNO Spark 6</option>
+        <option>TECNO Spark 7</option>
+        <option>TECNO Spark 8</option>
+        <option>TECNO Spark 9</option>
+        <option>TECNO Spark 10</option>
+        <option>TECNO Spark 20</option>
+        <option>TECNO Spark 20 Pro</option>
+        <option>TECNO Spark 30</option>
+        <!-- ASUS, Sony, Nothing, ZTE y gaming 2019–2024 -->
+        <option>ASUS ROG Phone II</option>
+        <option>ASUS ROG Phone 3</option>
+        <option>ASUS ROG Phone 5</option>
+        <option>ASUS ROG Phone 5s</option>
+        <option>ASUS ROG Phone 6</option>
+        <option>ASUS ROG Phone 6D</option>
+        <option>ASUS ROG Phone 7</option>
+        <option>ASUS ROG Phone 8</option>
+        <option>ASUS Zenfone 6</option>
+        <option>ASUS Zenfone 7</option>
+        <option>ASUS Zenfone 8</option>
+        <option>ASUS Zenfone 9</option>
+        <option>ASUS Zenfone 10</option>
+        <option>ASUS Zenfone 11 Ultra</option>
+        <option>Sony Xperia 1 II</option>
+        <option>Sony Xperia 1 III</option>
+        <option>Sony Xperia 1 IV</option>
+        <option>Sony Xperia 1 V</option>
+        <option>Sony Xperia 5 II</option>
+        <option>Sony Xperia 5 III</option>
+        <option>Sony Xperia 5 IV</option>
+        <option>Nothing Phone (1)</option>
+        <option>Nothing Phone (2)</option>
+        <option>ZTE Axon 10 Pro</option>
+        <option>ZTE Axon 20</option>
+        <option>ZTE Axon 30</option>
+        <option>ZTE Axon 40 Ultra</option>
+        <option>ZTE Axon 50 Ultra</option>
+        <option>ZTE Axon 60 Ultra</option>
+        <option>nubia RedMagic 5G</option>
+        <option>RedMagic 6</option>
+        <option>RedMagic 7</option>
+        <option>RedMagic 8 Pro</option>
+        <option>Lenovo Legion Phone Duel</option>
+</datalist>
     </div>
-    <div id="custom">
-      <div class="lbl" style="margin-bottom:8px">TU DPI ACTUAL (REAL)</div>
-      <input id="cdpi" type="number" inputmode="numeric" placeholder="Ej: 420" min="240" max="800">
-      <p class="tip" style="text-align:left;margin-top:6px">Míralo en Ajustes → Opciones de desarrollador → "Ancho mínimo", o con la app CPU-Z / Device Info HW (campo "Density"). Los valores típicos son 320, 360, 420, 450, 480, 540 o 560. iPhone no tiene DPI: usa SIN DPI.</p>
+    <div class="field" id="dpiField">
+      <span class="label">DPI ACTUAL DEL SISTEMA</span>
+      <input id="dpi" type="number" inputmode="numeric" min="240" max="800" placeholder="Ej. 420">
+      <div class="small">Introduce el DPI que ya utilizas. La herramienta no cambia el DPI de tu teléfono.</div>
     </div>
-    <button class="go" id="go">CALIBRAR</button>
-  </div>
+    <button class="primary" id="go">CALIBRAR</button>
+    <p class="small">La calibración se afina con tus pruebas manuales en la sala de entrenamiento. No lee automáticamente los movimientos del juego.</p>
+  </section>
 
-  <div class="card res" id="res">
-    <div class="lbl" id="resHead"></div>
-    <div id="items" style="display:flex;flex-direction:column;gap:8px"></div>
-    <div class="info" id="extra"></div>
-    <div class="row c2">
-      <button id="copy">COPIAR</button>
-      <button id="again" style="background:#fff;color:#000">GENERAR OTRA VEZ</button>
-    </div>
-    <p class="tip">Son valores de partida. La sensibilidad ideal depende de tu mano y tu dispositivo: súbela o bájala de 3 en 3 hasta que te sientas cómodo.</p>
-  </div>
-  <p class="tip">SENSI X IA · No afiliado a Garena. Herramienta de ayuda; no modifica archivos del juego.</p>
+  <section class="card hidden" id="loading"><div class="spinner"></div><b>CALIBRANDO SENSIBILIDADES...</b><p class="small">Preparando tu perfil</p></section>
+
+  <section class="card hidden" id="results">
+    <div class="resulthead">✓ CALIBRACIÓN GENERADA</div>
+    <div id="stats"></div>
+    <div id="meta" class="small" style="margin-top:10px"></div>
+    <div class="actions"><button id="copy">COPIAR</button><button id="again">GENERAR OTRA VEZ</button></div>
+    <button id="back" style="width:100%;margin-top:9px">VOLVER A CONFIGURACIÓN</button>
+  </section>
 </div>
-<div id="load">
-  <div class="ld"><div class="sp"></div><div class="in"></div><div class="dot"></div></div>
-  <div style="font-size:18px;font-weight:800;letter-spacing:.14em;line-height:1.3">ANALIZANDO<br>DISPOSITIVO...</div>
-  <div class="lbl">CALCULANDO SENSIBILIDAD</div>
-  <div><span class="big" id="cnt">9</span><span class="big" style="font-size:22px">s</span></div>
-  <div class="lc">
-    <div style="display:flex;justify-content:space-between"><div><div class="lbl">DISPOSITIVO</div><b id="lcName"></b></div><div style="text-align:right"><div class="lbl">MODO</div><b id="lcMode" style="color:var(--red2)"></b></div></div>
-    <div class="pb"><i id="pb"></i></div>
-  </div>
-</div>
-<div id="ban"><div class="bn" id="bn"><div class="sh"></div>
-  <div style="font-size:10px;letter-spacing:.24em;color:var(--red2);font-weight:700">● CALIBRADO EXITOSO ●</div>
-  <div style="font-size:20px;font-weight:800;letter-spacing:.08em">SENSI <span style="color:var(--red);text-shadow:0 0 12px rgba(255,0,64,.8)">IA</span> CALIBRADA</div>
-  <div style="font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.4)" id="bnDev"></div>
-</div></div></div>
-
 <script>
-// nombre|dpi|tier  (tier: l=low, m=mid, h=high, f=flagship)
-const RAW=`iPhone 8|326|h;iPhone X|458|h;iPhone XR|326|h;iPhone 11|326|h;iPhone 11 Pro|458|h;iPhone 12|460|f;iPhone 12 mini|476|f;iPhone 12 Pro|460|f;iPhone 13|460|f;iPhone 13 Pro|460|f;iPhone SE 3|326|h;iPhone 14|460|f;iPhone 14 Plus|458|f;iPhone 14 Pro|460|f;iPhone 15|460|f;iPhone 15 Plus|460|f;iPhone 15 Pro|460|f;iPhone 15 Pro Max|460|f;iPhone 16|460|f;iPhone 16 Pro|460|f;iPhone 16 Pro Max|460|f;iPhone 17|460|f;iPhone 17 Pro|460|f;iPhone 17 Pro Max|480|f;iPad 10|264|m;iPad Air 5|264|h;
-Galaxy A04|270|l;Galaxy A05|270|l;Galaxy A06|270|l;Galaxy A13|270|l;Galaxy A14|270|l;Galaxy A15|300|m;Galaxy A16|340|m;Galaxy A17|384|m;Galaxy A23|270|l;Galaxy A24|300|m;Galaxy A25|300|m;Galaxy A26|360|m;Galaxy A34 5G|350|m;Galaxy A35 5G|390|h;Galaxy A36 5G|410|h;Galaxy A54 5G|390|h;Galaxy A55 5G|400|h;Galaxy A56 5G|415|h;Galaxy M14|270|l;Galaxy M34 5G|390|m;Galaxy M54|390|m;Galaxy S21|421|f;Galaxy S22|425|f;Galaxy S23|425|f;Galaxy S24|416|f;Galaxy S24 Ultra|505|f;Galaxy S25|416|f;Galaxy S25 Ultra|505|f;Galaxy S26 Ultra|600|f;Galaxy Z Flip 6|426|f;Galaxy Z Fold 6|374|f;
-Redmi 12|269|l;Redmi 13C|269|l;Redmi 14C|269|l;Redmi Note 11|395|m;Redmi Note 12|395|m;Redmi Note 12 Pro|395|m;Redmi Note 13|395|m;Redmi Note 13 Pro|446|h;Redmi Note 14|395|m;Redmi Note 14 Pro|446|h;Redmi Note 14 Pro+ 5G|446|h;Xiaomi 12|419|f;Xiaomi 13|414|f;Xiaomi 14|460|f;Xiaomi 15|460|f;POCO X5 Pro|395|h;POCO X6 Pro|446|h;POCO X7 Pro|446|h;POCO F5|446|h;POCO F6|446|h;POCO F7|446|h;POCO M6|395|m;POCO C65|269|l;POCO C75|269|l;
-Pixel 6|411|h;Pixel 7|416|h;Pixel 7a|429|h;Pixel 8|428|f;Pixel 8a|430|h;Pixel 9|422|f;Pixel 9 Pro|495|f;
-Moto G14|269|l;Moto G24|269|l;Moto G34 5G|270|l;Moto G54 5G|396|m;Moto G84 5G|405|m;Moto G85 5G|395|m;Moto Edge 40|402|h;Moto Edge 50 Fusion|395|h;
-Infinix Hot 30|270|l;Infinix Hot 40i|269|l;Infinix Hot 50|320|l;Infinix Note 30|396|m;Infinix Note 40|396|m;Infinix Smart 8|270|l;
-Tecno Spark 10|270|l;Tecno Spark 20|396|m;Tecno Spark Go 2024|270|l;Tecno Camon 30|393|m;Tecno Pova 5|396|m;
-Realme C55|392|m;Realme C67|392|m;Realme 11 Pro+|394|h;Realme 12 Pro+|450|h;Realme 13 Pro|450|h;Realme GT Neo 3|394|h;Realme Narzo 60|392|m;
-Oppo A57|269|l;Oppo A58|395|m;Oppo A79 5G|394|m;Oppo Reno 8|394|h;Oppo Reno 11|394|h;Oppo Reno 12|394|h;Oppo Find X7|450|f;
-Vivo Y20|270|l;Vivo Y27|270|l;Vivo Y36|270|l;Vivo V29|453|h;Vivo V30|453|h;Vivo V40|453|h;Vivo X100|453|f;
-OnePlus Nord CE 3 Lite|394|m;OnePlus Nord 3|394|h;OnePlus 11|525|f;OnePlus 12|510|f;OnePlus 13|480|f;
-Honor X6|270|l;Honor X8|391|m;Honor 90|435|h;Honor 200|435|h;Honor Magic 6 Pro|453|f;
-Huawei Nova 11|395|h;Huawei P50 Pro|442|f;ZTE Blade A73|270|l;Nothing Phone 2a|395|h;Nothing Phone 3|460|f;
-iPhone 7|326|m;iPhone 7 Plus|401|m;iPhone 8 Plus|401|h;iPhone XS|458|h;iPhone XS Max|458|h;iPhone 11 Pro Max|458|h;iPhone SE 2|326|h;iPhone 12 Pro Max|458|f;iPhone 13 mini|476|f;iPhone 13 Pro Max|458|f;iPhone 14 Pro Max|460|f;iPhone 16 Plus|460|f;iPhone 16e|460|f;iPhone 17 Air|460|f;iPhone 17e|460|f;iPhone 18 Pro|460|f;iPhone 18 Pro Max|480|f;
-Galaxy A06 5G|270|l;Galaxy A07|320|l;Galaxy A12|270|l;Galaxy A16 5G|340|m;Galaxy A17 5G|384|m;Galaxy A22|270|l;Galaxy A32|270|l;Galaxy A33 5G|300|m;Galaxy A37 5G|390|h;Galaxy A52|300|m;Galaxy A53 5G|360|m;Galaxy A57 5G|415|h;Galaxy A72|394|m;Galaxy A73 5G|393|h;Galaxy M15|390|m;Galaxy M35|390|m;Galaxy M55|400|h;Galaxy F15|390|m;Galaxy S20 FE|405|h;Galaxy S21 Ultra|515|f;Galaxy S22 Ultra|500|f;Galaxy S23 Ultra|500|f;Galaxy S24+|513|f;Galaxy S24 FE|416|h;Galaxy S25+|513|f;Galaxy S25 Edge|513|f;Galaxy S25 FE|416|h;Galaxy S26|416|f;Galaxy S26+|513|f;Galaxy Z Flip 5|426|f;Galaxy Z Flip 7|426|f;Galaxy Z Fold 5|373|f;Galaxy Z Fold 7|375|f;
-Redmi 15|270|l;Redmi 15C|270|l;Redmi A5|270|l;Redmi Note 15|395|m;Redmi Note 15 Pro|446|h;Redmi Note 15 Pro+|446|h;Redmi Note 17|446|h;Xiaomi 15T|446|h;Xiaomi 15T Pro|446|h;Xiaomi 15 Ultra|522|f;Xiaomi 17|460|f;Xiaomi 17 Pro|460|f;Xiaomi 17 Pro Max|460|f;Xiaomi 17 Ultra|522|f;POCO X7|395|h;POCO X8 Pro|446|h;POCO F7 Pro|526|h;POCO F7 Ultra|526|f;POCO F8 Pro|526|f;POCO F8 Ultra|526|f;POCO M7|270|l;POCO M7 Pro|395|m;POCO C71|270|l;
-Pixel 6 Pro|512|f;Pixel 7 Pro|512|f;Pixel 8 Pro|489|f;Pixel 9 Pro XL|486|f;Pixel 9a|422|h;Pixel 10|422|f;Pixel 10 Pro|495|f;Pixel 10 Pro XL|486|f;Pixel 10a|422|h;Pixel 11|422|f;Pixel 11 Pro|495|f;Pixel 11 Pro XL|486|f;
-Moto G05|270|l;Moto G15|270|l;Moto G25|270|l;Moto G35 5G|270|l;Moto G55 5G|400|m;Moto G56 5G|400|m;Moto G86 5G|400|m;Moto G96 5G|400|h;Moto Edge 60 Fusion|395|h;Moto Edge 60 Pro|400|h;Moto Razr 60|400|f;
-Infinix Hot 50i|270|l;Infinix Hot 60i|270|l;Infinix Hot 60 Pro|396|m;Infinix Note 50|396|m;Infinix Note 50 Pro|396|m;Infinix GT 30 Pro|400|h;Infinix Smart 9|270|l;Infinix Zero 40|388|h;
-Tecno Spark 30|270|l;Tecno Spark 30C|270|l;Tecno Spark 40|396|m;Tecno Pova 6|396|m;Tecno Pova 7|396|m;Tecno Camon 40|395|m;Tecno Spark Go 5G|270|l;
-Realme C61|270|l;Realme C63|270|l;Realme C65|270|l;Realme C71|270|l;Realme 14 Pro|450|h;Realme 14T|400|m;Realme GT 7|450|f;Realme GT 7 Pro|450|f;Realme GT 8 Pro|480|f;Realme Narzo 80|392|m;
-Oppo A5|270|l;Oppo A5 Pro|395|m;Oppo A60|270|l;Oppo Reno 13|394|h;Oppo Reno 14|394|h;Oppo Find X8|450|f;Oppo Find X9|450|f;
-Vivo Y19|270|l;Vivo Y29|270|l;Vivo Y39|270|l;Vivo V50|453|h;Vivo V60|453|h;Vivo T4|394|h;Vivo X200|460|f;Vivo X300|460|f;
-OnePlus 15|480|f;OnePlus Nord 5|450|h;OnePlus Nord CE5|394|m;
-Honor 400|435|h;Honor X9c|395|m;Honor Magic 7 Pro|460|f;Honor Magic 8 Pro|460|f;
-Nothing Phone 3a|387|h;Nothing Phone 3a Pro|387|h;CMF Phone 2 Pro|395|m;
-Itel A70|270|l;Itel P55|270|l;Itel S25|270|l;
-iPad 9|264|m;iPad 11 (A16)|264|h;iPad mini 6|326|h;iPad mini 7|326|h;iPad Air 4|264|h;iPad Air M2 11|264|f;iPad Air M2 13|264|f;iPad Air M3 11|264|f;iPad Air M3 13|264|f;iPad Pro 11 M2|264|f;iPad Pro 11 M4|264|f;iPad Pro 13 M4|264|f;iPad Pro 11 M5|264|f;iPad Pro 13 M5|264|f;
-Galaxy Tab A7 Lite|170|l;Galaxy Tab A8|224|l;Galaxy Tab A9|240|l;Galaxy Tab A9+|274|m;Galaxy Tab A11|280|m;Galaxy Tab A11+|274|m;Galaxy Tab S6 Lite|220|m;Galaxy Tab S7 FE|243|m;Galaxy Tab S8|274|h;Galaxy Tab S9|274|h;Galaxy Tab S9 FE|224|m;Galaxy Tab S9 Ultra|240|f;Galaxy Tab S10 FE|224|m;Galaxy Tab S10+|274|f;Galaxy Tab S10 Ultra|240|f;Galaxy Tab S11|274|f;Galaxy Tab S11 Ultra|240|f;
-Xiaomi Pad 5|275|h;Xiaomi Pad 6|309|h;Xiaomi Pad 7|345|h;Xiaomi Pad 7 Pro|345|f;Redmi Pad|207|l;Redmi Pad SE|207|l;Redmi Pad Pro|240|m;Redmi Pad 2|207|m;POCO Pad|240|m;POCO Pad X1|345|h;
-Lenovo Tab M9|240|l;Lenovo Tab M10|224|l;Lenovo Tab P11|212|m;Lenovo Tab P12|251|m;Lenovo Legion Tab|343|f;
-OnePlus Pad|296|h;OnePlus Pad 2|296|f;OnePlus Pad 3|296|f;Realme Pad 2|190|m;Honor Pad X9|190|l;Honor Pad 9|267|m;Huawei MatePad 11.5|252|m;Huawei MatePad Pro 13.2|263|f;Pixel Tablet|276|h;Oppo Pad 3|296|h;Oppo Pad Neo|224|m;Moto Tab G70|200|l;Nokia T21|180|l;Alcatel Tab|170|l`;
-const DEV=[...new Map(RAW.replace(/\n/g,'').split(';').map(s=>[s.split('|')[0],s])).values()].map(s=>{const [name,dpi,t]=s.split('|');return{name,dpi:+dpi,tier:{l:'low',m:'mid',h:'high',f:'flagship'}[t]}});
-
-let mode='CON',inten='MEDIA',dev=DEV.find(d=>d.name==='Galaxy A17'),last=null,busy=false;
 const $=id=>document.getElementById(id);
-$('q').value=dev.name;$('devInfo').textContent=dev.tier;
+let mode='CON', intensity='MEDIA', current=null;
+const names=['General','Punto Rojo','Mira 2x','Mira 4x','AWM','Mira Libre'];
+// Selector propio de dispositivos: la lista se incorpora directamente al JavaScript
+// para que también funcione en navegadores Android que no exponen datalist correctamente.
+const deviceInput=$('device'), deviceList=$('deviceList');
+const deviceNames=["iPhone Duo", "iPhone 18 Pro Max", "iPhone 18 Pro", "iPhone Air", "iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 17", "iPhone 17e", "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16", "iPhone 16e", "Galaxy S26 Ultra", "Galaxy S26+", "Galaxy S26", "Galaxy S26 FE", "Galaxy Z Fold8 Ultra", "Galaxy Z Fold8", "Galaxy Z Flip8", "Galaxy A27", "Galaxy A18", "Galaxy Z TriFold", "Pixel 11 Pro Fold", "Pixel 11 Pro XL", "Pixel 11 Pro", "Pixel 11", "Pixel 10 Pro Fold", "Pixel 10 Pro XL", "Pixel 10 Pro", "Pixel 10", "Pixel 10a", "Xiaomi 18 Pro Max", "Xiaomi 18 Pro", "Xiaomi 17 Ultra", "Xiaomi 17", "Xiaomi 17T Pro", "Xiaomi 17T", "Xiaomi 15 Ultra", "Xiaomi 15T Pro", "Xiaomi 15T", "Xiaomi 15", "REDMI Note 17 Pro Max 5G", "REDMI Note 17 Pro 5G", "REDMI Note 17 5G", "REDMI Note 17", "REDMI 17 5G", "REDMI 17", "REDMI 17C 5G", "REDMI Note 15 Pro+ 5G", "REDMI Note 15 Pro 5G", "REDMI Note 15 Pro", "REDMI Note 15 5G", "REDMI Note 15", "REDMI 15C 5G", "POCO F9 Ultra", "POCO F9 Pro", "POCO F8 Ultra", "POCO F8 Pro", "POCO X8 Pro Max", "POCO X8 Pro", "POCO X8", "POCO M8 Pro 5G", "POCO M8 5G", "POCO C95 Pro", "motorola signature 27", "motorola razr fold", "motorola razr 70 ultra", "motorola razr 70", "motorola edge 70 pro", "motorola edge 70", "vivo X500 Pro Max", "vivo X500 Pro", "vivo X500", "vivo X Fold6", "OPPO Find X10 Pro Max", "OPPO Find X10", "OPPO Reno 17 Pro", "OPPO Reno 17", "OnePlus 16", "HUAWEI Pura 90s Pro Max", "HUAWEI Pura 90s Pro", "HONOR Magic V6 5G", "HONOR Magic 9", "HONOR X80 Pro Max", "iPhone 18 Pro Max", "iPhone 18 Pro", "iPhone Duo", "iPhone 17 Pro Max", "iPhone 17 Pro", "iPhone 17 Air", "iPhone 17", "iPhone 17e", "iPhone 16 Pro Max", "iPhone 16 Pro", "iPhone 16 Plus", "iPhone 16", "iPhone 16e", "iPhone 15 Pro Max", "iPhone 15 Pro", "iPhone 15 Plus", "iPhone 15", "iPhone 14 Pro Max", "iPhone 14 Pro", "iPhone 14 Plus", "iPhone 14", "iPhone 13 Pro Max", "iPhone 13 Pro", "iPhone 13 mini", "iPhone 13", "iPhone 12 Pro Max", "iPhone 12 Pro", "iPhone 12 mini", "iPhone 12", "iPhone 11 Pro Max", "iPhone 11 Pro", "iPhone 11", "iPhone SE 2022", "iPhone XR", "iPhone XS Max", "iPhone XS", "Galaxy S26 Ultra", "Galaxy S26+", "Galaxy S26", "Galaxy S26 FE", "Galaxy S25 Ultra", "Galaxy S25+", "Galaxy S25", "Galaxy S25 FE", "Galaxy S24 Ultra", "Galaxy S24+", "Galaxy S24", "Galaxy S24 FE", "Galaxy S23 Ultra", "Galaxy S23+", "Galaxy S23", "Galaxy S22 Ultra", "Galaxy S22+", "Galaxy S22", "Galaxy S21 Ultra", "Galaxy S21+", "Galaxy S21", "Galaxy Z Fold8", "Galaxy Z Flip8", "Galaxy Z Fold7", "Galaxy Z Flip7", "Galaxy Z Fold6", "Galaxy Z Flip6", "Galaxy Z Fold5", "Galaxy Z Flip5", "Galaxy Z Fold4", "Galaxy Z Flip4", "Galaxy A57 5G", "Galaxy A56 5G", "Galaxy A55 5G", "Galaxy A54 5G", "Galaxy A53 5G", "Galaxy A52s 5G", "Galaxy A37 5G", "Galaxy A36 5G", "Galaxy A35 5G", "Galaxy A34 5G", "Galaxy A33 5G", "Galaxy A26 5G", "Galaxy A25 5G", "Galaxy A24", "Galaxy A17 5G", "Galaxy A16 5G", "Galaxy A15 5G", "Galaxy A14 5G", "Galaxy A08", "Galaxy A07", "Galaxy M56 5G", "Galaxy M55 5G", "Galaxy M54 5G", "Galaxy M53 5G", "Galaxy M35 5G", "Galaxy M34 5G", "Galaxy M33 5G", "Galaxy M15 5G", "Galaxy M14 5G", "Galaxy F55 5G", "Galaxy F54 5G", "Galaxy F34 5G", "Galaxy F15 5G", "Xiaomi 17 Ultra", "Xiaomi 17 Pro Max", "Xiaomi 17 Pro", "Xiaomi 17", "Xiaomi 15 Ultra", "Xiaomi 15T Pro", "Xiaomi 15T", "Xiaomi 15", "Xiaomi 14 Ultra", "Xiaomi 14", "Xiaomi 13T Pro", "Xiaomi 13T", "Xiaomi 13 Pro", "Xiaomi 13", "Xiaomi 12T Pro", "Xiaomi 12T", "Xiaomi 12 Pro", "Xiaomi 12", "Redmi Note 17 Pro+ 5G", "Redmi Note 17 Pro 5G", "Redmi Note 17 5G", "Redmi Note 17 4G", "Redmi Note 15 Pro+ 5G", "Redmi Note 15 Pro 5G", "Redmi Note 15 5G", "Redmi Note 14 Pro+ 5G", "Redmi Note 14 Pro 5G", "Redmi Note 14 5G", "Redmi Note 13 Pro+ 5G", "Redmi Note 13 Pro 5G", "Redmi Note 13 5G", "Redmi Note 12 Pro+ 5G", "Redmi Note 12 Pro 5G", "Redmi Note 12 5G", "Redmi Note 11 Pro 5G", "Redmi Note 11", "Redmi 15C", "Redmi 15", "Redmi 14C", "Redmi 13C", "Redmi 13", "Redmi 12C", "Redmi 12", "Redmi A5", "Redmi A3", "Redmi 10", "POCO F9 Ultra", "POCO F9 Pro", "POCO F8 Ultra", "POCO F8 Pro", "POCO F7 Ultra", "POCO F7 Pro", "POCO F7", "POCO F6 Pro", "POCO F6", "POCO F5 Pro", "POCO F5", "POCO X8 Pro", "POCO X8", "POCO X7 Pro", "POCO X7", "POCO X6 Pro", "POCO X6", "POCO X5 Pro", "POCO X5", "POCO X4 GT", "POCO X3 Pro", "POCO M8 Pro", "POCO M7 Pro 5G", "POCO M6 Pro", "POCO M6", "POCO M5", "POCO C85", "POCO C75", "POCO C65", "POCO C55", "Motorola Edge 70 Plus", "Motorola Edge 70 Fusion", "Motorola Edge 70", "Motorola Edge 60 Pro", "Motorola Edge 60 Fusion", "Motorola Edge 60", "Motorola Edge 50 Ultra", "Motorola Edge 50 Pro", "Motorola Edge 50 Fusion", "Motorola Edge 50 Neo", "Motorola Edge 40 Pro", "Motorola Edge 40 Neo", "Moto G Max 5G", "Moto G86 5G", "Moto G77 5G", "Moto G67 5G", "Moto G56 5G", "Moto G47 5G", "Moto G37", "Moto G Stylus 5G 2025", "Moto G Power 2025", "Moto G85", "Moto G84", "Moto G75", "Moto G54", "Moto G34", "Moto G24", "Moto G14", "Moto G13", "Motorola Razr 70 Ultra", "Motorola Razr 70", "Motorola Razr 60 Ultra", "Motorola Razr 60", "Motorola Razr 50 Ultra", "Motorola Razr 50", "Pixel 11 Pro XL", "Pixel 11 Pro Fold", "Pixel 11 Pro", "Pixel 11", "Pixel 10 Pro XL", "Pixel 10 Pro", "Pixel 10", "Pixel 10a", "Pixel 9 Pro XL", "Pixel 9 Pro", "Pixel 9", "Pixel 9a", "Pixel 8 Pro", "Pixel 8", "Pixel 8a", "Pixel 7 Pro", "Pixel 7", "Pixel 7a", "Infinix GT 30 Pro 5G", "Infinix GT 20 Pro 5G", "Infinix GT 10 Pro", "Infinix Note 60 Pro", "Infinix Note 50 Pro+ 5G", "Infinix Note 50 Pro", "Infinix Note 50", "Infinix Note 40 Pro+ 5G", "Infinix Note 40 Pro", "Infinix Note 40", "Infinix Hot 60 Pro+", "Infinix Hot 60 Pro", "Infinix Hot 50 Pro+", "Infinix Hot 50", "Infinix Zero 40 5G", "Infinix Zero 30 5G", "TECNO Camon 50 Pro", "TECNO Camon 50", "TECNO Camon 40 Pro 5G", "TECNO Camon 40", "TECNO Camon 30 Premier 5G", "TECNO Camon 30 Pro", "TECNO Spark 40 Pro+", "TECNO Spark 40 Pro", "TECNO Spark 40", "TECNO Spark Go 2", "TECNO Spark 30 Pro", "TECNO Phantom V Fold2 5G", "TECNO Phantom V Flip2", "realme GT 8 Pro", "realme GT 8", "realme GT 7 Pro", "realme GT 7", "realme GT 6", "realme GT 5 Pro", "realme 14 Pro+ 5G", "realme 14 Pro 5G", "realme 14 5G", "realme 13 Pro+ 5G", "realme 13 Pro 5G", "realme 13+ 5G", "realme 12 Pro+ 5G", "realme 12 Pro 5G", "realme 12 5G", "realme P3 Pro 5G", "realme P3 5G", "realme C75", "realme C65", "realme C55", "realme C53", "realme Narzo 70 Pro", "realme Narzo 60 Pro", "OPPO Find X9 Ultra", "OPPO Find X9 Pro", "OPPO Find X9", "OPPO Find X8 Pro", "OPPO Find N5", "OPPO Reno 16 Pro", "OPPO Reno 16F", "OPPO Reno 15 Pro", "OPPO Reno 13 Pro 5G", "OPPO Reno 12 Pro 5G", "OPPO Reno 11 Pro", "OPPO A6 Pro 5G", "OPPO A5 Pro 5G", "OPPO A5 5G", "OPPO A3 Pro 5G", "OPPO A3 5G", "OPPO A79 5G", "OPPO A60", "OPPO A58", "vivo X300 Pro", "vivo X300", "vivo X200 Pro", "vivo X200 FE", "vivo X100 Pro", "vivo X100", "vivo V60", "vivo V50", "vivo V40 5G", "vivo V30", "vivo Y300 Pro", "vivo Y200", "vivo Y100", "vivo Y29 5G", "OnePlus 16", "OnePlus 15T", "OnePlus 15", "OnePlus 13", "OnePlus 13R", "OnePlus 12", "OnePlus 12R", "OnePlus Nord 5", "OnePlus Nord 4", "OnePlus Nord CE5", "OnePlus Open", "HONOR Magic8 Pro", "HONOR Magic8", "HONOR Magic7 Pro", "HONOR Magic7", "HONOR Magic V5", "HONOR Magic6 Pro", "HONOR Magic V3", "HONOR 600 Pro", "HONOR 500", "HONOR 400 Pro", "HONOR 400", "HONOR 200 Pro", "HONOR 200", "HONOR X9c", "HONOR X8c", "HONOR X7c", "HONOR X6b", "HUAWEI Mate 80 Pro", "HUAWEI Mate 80", "HUAWEI Mate 70 Pro", "HUAWEI Mate 70", "HUAWEI Mate X6", "HUAWEI Mate X5", "HUAWEI Pura 80 Ultra", "HUAWEI Pura 80 Pro", "HUAWEI Pura 70 Ultra", "HUAWEI nova 14 Pro", "HUAWEI nova 13", "HUAWEI nova 12", "ROG Phone 10 Pro", "ROG Phone 9 Pro", "ROG Phone 9", "ROG Phone 9 FE", "ROG Phone 8 Pro", "ROG Phone 8", "Zenfone 12 Ultra", "Zenfone 11 Ultra", "Zenfone 10", "Sony Xperia 1 VIII", "Sony Xperia 10 VIII", "Sony Xperia 1 VII", "Sony Xperia 10 VII", "Sony Xperia 1 VI", "Sony Xperia 5 V", "Nothing Phone (4a) Pro", "Nothing Phone (4a)", "Nothing Phone (3)", "Nothing Phone (3a) Pro", "Nothing Phone (3a)", "Nothing Phone (2a) Plus", "Nothing Phone (2a)", "nubia Z80 Ultra", "nubia Z70 Ultra", "nubia Z60 Ultra", "nubia Neo 3 GT", "nubia Neo 2 5G", "REDMAGIC 11 Pro", "REDMAGIC 10 Pro", "REDMAGIC 10S Pro", "REDMAGIC 9 Pro", "TCL 60 Pro", "TCL 60", "TCL 50 Pro NXTPAPER", "TCL 50 5G", "HMD Skyline", "HMD Fusion", "Nokia G60 5G", "Nokia X30 5G", "Nokia G42 5G", "Lenovo Legion Y70", "Lenovo Legion Phone Duel 2", "Fairphone 6+", "Fairphone 6", "Fairphone 5", "Sharp AQUOS R11", "Sharp AQUOS R10", "Sharp AQUOS sense10", "Meizu 22", "Meizu 21 Pro", "Meizu 21", "Jolla Phone", "iPad Pro 13 M5", "iPad Pro 11 M5", "iPad Air 13 M4", "iPad Air 11 M4", "iPad mini A17 Pro", "iPad 11th Gen", "Galaxy Tab S11 Ultra", "Galaxy Tab S11+", "Galaxy Tab S11", "Galaxy Tab S10 Ultra", "Galaxy Tab S10+", "Galaxy Tab S9 Ultra", "Galaxy Tab S9+", "Xiaomi Pad 8 Pro", "Xiaomi Pad 8", "Xiaomi Pad 7 Pro", "Xiaomi Pad 7", "Redmi Pad Pro", "Redmi Pad SE", "Lenovo Legion Tab Gen 4", "Lenovo Tab P12", "HUAWEI MatePad Pro 13.2", "HUAWEI MatePad 12 X", "iPhone SE 2020", "Galaxy S10+", "Galaxy S10", "Galaxy S10e", "Galaxy S10 Lite", "Galaxy S20 Ultra", "Galaxy S20+", "Galaxy S20", "Galaxy S20 FE", "Galaxy S21 FE", "Galaxy S23 FE", "Galaxy A10", "Galaxy A10s", "Galaxy A20", "Galaxy A20s", "Galaxy A30", "Galaxy A30s", "Galaxy A40", "Galaxy A50", "Galaxy A50s", "Galaxy A51", "Galaxy A70", "Galaxy A70s", "Galaxy A71", "Galaxy A01", "Galaxy A02", "Galaxy A03", "Galaxy A03s", "Galaxy A04", "Galaxy A04s", "Galaxy A11", "Galaxy A12", "Galaxy A13", "Galaxy A14", "Galaxy A21s", "Galaxy A22", "Galaxy A23", "Galaxy A31", "Galaxy A32", "Galaxy A41", "Galaxy A42 5G", "Galaxy A52", "Galaxy A52 5G", "Galaxy A60", "Galaxy A80", "Galaxy A90 5G", "Galaxy A15", "Galaxy A16", "Galaxy M10", "Galaxy M20", "Galaxy M30", "Galaxy M30s", "Galaxy M31", "Galaxy M31s", "Galaxy M11", "Galaxy M12", "Galaxy M21", "Galaxy M22", "Galaxy M32", "Galaxy M32 5G", "Galaxy M51", "Galaxy M52 5G", "Galaxy M23 5G", "Galaxy F12", "Galaxy F22", "Galaxy F23 5G", "Galaxy Note10+", "Galaxy Note10", "Galaxy Note10 Lite", "Galaxy Note20 Ultra", "Galaxy Note20", "Galaxy Z Fold2", "Galaxy Z Fold3", "Galaxy Z Flip", "Galaxy Z Flip3", "Mi 9", "Mi 9T", "Mi 9T Pro", "Mi 9 Lite", "Mi Note 10", "Mi Note 10 Pro", "Mi 10", "Mi 10 Pro", "Mi 10T", "Mi 10T Pro", "Mi 10 Lite", "Mi 10i", "Mi 11", "Mi 11 Lite", "Mi 11 Lite 5G", "Mi 11i", "Mi 11T", "Mi 11T Pro", "Xiaomi 12X", "Xiaomi 12 Lite", "Xiaomi 13 Lite", "Xiaomi 14 Pro", "Xiaomi 14T", "Xiaomi 14T Pro", "Redmi 7", "Redmi 7A", "Redmi 8", "Redmi 8A", "Redmi 9", "Redmi 9A", "Redmi 9C", "Redmi 9T", "Redmi 10A", "Redmi 10C", "Redmi Note 7", "Redmi Note 7 Pro", "Redmi Note 8", "Redmi Note 8 Pro", "Redmi Note 8T", "Redmi Note 9", "Redmi Note 9S", "Redmi Note 9 Pro", "Redmi Note 9 Pro Max", "Redmi Note 10", "Redmi Note 10S", "Redmi Note 10 Pro", "Redmi Note 10 5G", "Redmi Note 11S", "Redmi Note 11 Pro", "Redmi Note 12", "Redmi Note 12S", "Redmi Note 12 Pro", "Redmi Note 13", "Redmi Note 13 Pro", "Redmi Note 14", "Redmi Note 14 Pro", "POCO F1", "POCO X2", "POCO M2", "POCO M2 Pro", "POCO X3", "POCO X3 NFC", "POCO F2 Pro", "POCO M3", "POCO M3 Pro 5G", "POCO F3", "POCO X3 GT", "POCO M4 Pro", "POCO M4 Pro 5G", "POCO X4 Pro 5G", "POCO F4", "POCO F4 GT", "POCO M5s", "POCO X5 Pro 5G", "Moto G7", "Moto G7 Play", "Moto G7 Power", "Moto G7 Plus", "Moto G8", "Moto G8 Power", "Moto G8 Plus", "Moto G9 Play", "Moto G9 Plus", "Moto G9 Power", "Moto G10", "Moto G20", "Moto G30", "Moto G31", "Moto G32", "Moto G41", "Moto G50", "Moto G60", "Moto G60s", "Moto G71 5G", "Moto G82 5G", "Moto G100", "Moto G200", "Moto G22", "Moto G23", "Moto G24 Power", "Moto G42", "Moto G52", "Moto G53 5G", "Moto G54 5G", "Moto G62 5G", "Moto G72", "Moto G73 5G", "Moto G84 5G", "Moto E6", "Moto E6 Plus", "Moto E7", "Moto E7 Plus", "Moto E20", "Moto E22", "Moto E32", "Moto E40", "Motorola Edge", "Motorola Edge+", "Motorola Edge 20", "Motorola Edge 20 Pro", "Motorola Edge 20 Lite", "Motorola Edge 30", "Motorola Edge 30 Pro", "Motorola Edge 30 Fusion", "Motorola Edge 30 Neo", "Motorola Edge 40", "Motorola Edge 50", "Motorola Razr 2019", "Motorola Razr 5G", "Motorola Razr 40", "Motorola Razr 40 Ultra", "Pixel 3a", "Pixel 3a XL", "Pixel 4", "Pixel 4 XL", "Pixel 4a", "Pixel 4a 5G", "Pixel 5", "Pixel 5a", "Pixel 6", "Pixel 6 Pro", "Pixel 6a", "Pixel 9 Pro Fold", "OnePlus 7", "OnePlus 7 Pro", "OnePlus 7T", "OnePlus 7T Pro", "OnePlus 8", "OnePlus 8 Pro", "OnePlus 8T", "OnePlus Nord", "OnePlus Nord N10 5G", "OnePlus Nord N100", "OnePlus 9", "OnePlus 9 Pro", "OnePlus 9R", "OnePlus Nord 2", "OnePlus Nord CE", "OnePlus 10 Pro", "OnePlus 10T", "OnePlus 10R", "OnePlus Nord 2T", "OnePlus Nord CE 2", "OnePlus 11", "OnePlus 11R", "OnePlus Nord 3", "OnePlus Nord CE 3 Lite", "OnePlus Nord CE4", "realme 3", "realme 3 Pro", "realme 5", "realme 5 Pro", "realme 5i", "realme 6", "realme 6 Pro", "realme 7", "realme 7 Pro", "realme 8", "realme 8 Pro", "realme 8 5G", "realme 9", "realme 9 Pro", "realme 9 Pro+", "realme 9i", "realme 10", "realme 10 Pro", "realme 10 Pro+", "realme 11", "realme 11 Pro", "realme 11 Pro+", "realme 12", "realme 12+ 5G", "realme 12 Pro", "realme 12 Pro+", "realme 13", "realme 13 Pro", "realme 13 Pro+", "realme C3", "realme C11", "realme C15", "realme C21", "realme C25", "realme C30", "realme C33", "realme C35", "realme C51", "realme C67", "realme C series", "OPPO Find X2", "OPPO Find X2 Pro", "OPPO Find X3 Pro", "OPPO Find X5", "OPPO Find X5 Pro", "OPPO Find X6 Pro", "OPPO Find X7 Ultra", "OPPO Find N", "OPPO Find N2 Flip", "OPPO Find N3 Flip", "OPPO Reno2", "OPPO Reno2 F", "OPPO Reno3", "OPPO Reno3 Pro", "OPPO Reno4", "OPPO Reno4 Pro", "OPPO Reno5", "OPPO Reno5 Pro", "OPPO Reno6", "OPPO Reno6 Pro", "OPPO Reno7", "OPPO Reno7 Pro", "OPPO Reno8", "OPPO Reno8 Pro", "OPPO Reno9", "OPPO Reno9 Pro+", "OPPO Reno10", "OPPO Reno10 Pro+", "OPPO Reno11", "OPPO Reno11 Pro", "OPPO Reno12", "OPPO Reno12 Pro", "OPPO A5 2020", "OPPO A9 2020", "OPPO A15", "OPPO A16", "OPPO A17", "OPPO A31", "OPPO A53", "OPPO A54", "OPPO A55", "OPPO A57", "OPPO A74", "OPPO A76", "OPPO A77", "OPPO A78", "OPPO A79", "vivo V15", "vivo V17", "vivo V19", "vivo V20", "vivo V20 Pro", "vivo V21", "vivo V21e", "vivo V23", "vivo V23e", "vivo V25", "vivo V25 Pro", "vivo V27", "vivo V27 Pro", "vivo V29", "vivo V29 Pro", "vivo V30 Pro", "vivo V40", "vivo V40 Pro", "vivo X50", "vivo X50 Pro", "vivo X60", "vivo X60 Pro", "vivo X70 Pro", "vivo X80 Pro", "vivo X90 Pro", "vivo Y11", "vivo Y12", "vivo Y15", "vivo Y20", "vivo Y21", "vivo Y22", "vivo Y27", "vivo Y33s", "vivo Y35", "vivo Y36", "vivo Y55", "vivo Y series", "Huawei P30", "Huawei P30 Pro", "Huawei P30 Lite", "Huawei P40", "Huawei P40 Pro", "Huawei P40 Lite", "Huawei Mate 30", "Huawei Mate 30 Pro", "Huawei Mate 40 Pro", "Huawei Mate 50 Pro", "Huawei P50", "Huawei P50 Pro", "Huawei P50 Pocket", "Huawei P60 Pro", "Huawei nova 5T", "Huawei nova 7i", "Huawei nova 8i", "Huawei nova 9", "Huawei nova 9 SE", "Huawei nova 10", "Huawei nova 10 Pro", "Huawei nova 11", "Huawei nova 11 Pro", "Huawei nova 12s", "HONOR 9X", "HONOR 20", "HONOR 20 Pro", "HONOR 30", "HONOR 30 Pro", "HONOR 50", "HONOR 50 Lite", "HONOR 60", "HONOR 70", "HONOR 80", "HONOR 80 Pro", "HONOR 90", "HONOR 90 Lite", "HONOR 100", "HONOR 100 Pro", "HONOR Magic3 Pro", "HONOR Magic4 Pro", "HONOR Magic5 Pro", "HONOR X7", "HONOR X8", "HONOR X9", "HONOR X9a", "HONOR X9b", "HONOR X6", "HONOR X6a", "HONOR X7a", "HONOR X8a", "Infinix Zero 8", "Infinix Zero X Pro", "Infinix Zero 5G", "Infinix Zero 20", "Infinix Note 7", "Infinix Note 8", "Infinix Note 10 Pro", "Infinix Note 11 Pro", "Infinix Note 12", "Infinix Note 12 VIP", "Infinix Note 30", "Infinix Note 30 Pro", "Infinix Note 30 VIP", "Infinix Hot 9", "Infinix Hot 10", "Infinix Hot 11", "Infinix Hot 12", "Infinix Hot 20", "Infinix Hot 30", "Infinix Hot 40", "TECNO Camon 12", "TECNO Camon 15", "TECNO Camon 16", "TECNO Camon 17", "TECNO Camon 18", "TECNO Camon 19", "TECNO Camon 20", "TECNO Camon 20 Pro", "TECNO Camon 30", "TECNO Pova", "TECNO Pova 2", "TECNO Pova 3", "TECNO Pova 4", "TECNO Pova 5", "TECNO Pova 5 Pro", "TECNO Pova 6", "TECNO Pova 6 Pro", "TECNO Spark 6", "TECNO Spark 7", "TECNO Spark 8", "TECNO Spark 9", "TECNO Spark 10", "TECNO Spark 20", "TECNO Spark 20 Pro", "TECNO Spark 30", "ASUS ROG Phone II", "ASUS ROG Phone 3", "ASUS ROG Phone 5", "ASUS ROG Phone 5s", "ASUS ROG Phone 6", "ASUS ROG Phone 6D", "ASUS ROG Phone 7", "ASUS ROG Phone 8", "ASUS Zenfone 6", "ASUS Zenfone 7", "ASUS Zenfone 8", "ASUS Zenfone 9", "ASUS Zenfone 10", "ASUS Zenfone 11 Ultra", "Sony Xperia 1 II", "Sony Xperia 1 III", "Sony Xperia 1 IV", "Sony Xperia 1 V", "Sony Xperia 5 II", "Sony Xperia 5 III", "Sony Xperia 5 IV", "Nothing Phone (1)", "Nothing Phone (2)", "ZTE Axon 10 Pro", "ZTE Axon 20", "ZTE Axon 30", "ZTE Axon 40 Ultra", "ZTE Axon 50 Ultra", "ZTE Axon 60 Ultra", "nubia RedMagic 5G", "RedMagic 6", "RedMagic 7", "RedMagic 8 Pro", "Lenovo Legion Phone Duel"];
+let activeDeviceIndex=-1;
+function renderDeviceList(){
+ const q=deviceInput.value.trim().toLocaleLowerCase('es');
+ const matches=(q?deviceNames.filter(n=>n.toLocaleLowerCase('es').includes(q)):deviceNames).slice(0,60);
+ deviceList.replaceChildren(); activeDeviceIndex=-1;
+ if(!matches.length){const empty=document.createElement('div');empty.className='device-empty';empty.textContent='No hay coincidencias. Puedes usar el nombre escrito.';deviceList.appendChild(empty);}
+ else matches.forEach(name=>{const b=document.createElement('button');b.type='button';b.className='device-option';b.textContent=name;b.setAttribute('role','option');b.addEventListener('click',()=>{deviceInput.value=name;closeDeviceList();});deviceList.appendChild(b)});
+ deviceList.classList.add('open');
+}
+function closeDeviceList(){deviceList.classList.remove('open');activeDeviceIndex=-1}
+deviceInput.addEventListener('focus',renderDeviceList);
+deviceInput.addEventListener('click',renderDeviceList);
+deviceInput.addEventListener('input',renderDeviceList);
+deviceInput.addEventListener('keydown',e=>{const opts=[...deviceList.querySelectorAll('.device-option')];if(e.key==='ArrowDown'&&deviceList.classList.contains('open')){e.preventDefault();activeDeviceIndex=Math.min(activeDeviceIndex+1,opts.length-1);opts.forEach((o,i)=>o.classList.toggle('selected',i===activeDeviceIndex));opts[activeDeviceIndex]?.scrollIntoView({block:'nearest'});}else if(e.key==='ArrowUp'&&deviceList.classList.contains('open')){e.preventDefault();activeDeviceIndex=Math.max(activeDeviceIndex-1,0);opts.forEach((o,i)=>o.classList.toggle('selected',i===activeDeviceIndex));opts[activeDeviceIndex]?.scrollIntoView({block:'nearest'});}else if(e.key==='Enter'&&activeDeviceIndex>=0&&opts[activeDeviceIndex]){e.preventDefault();deviceInput.value=opts[activeDeviceIndex].textContent;closeDeviceList()}else if(e.key==='Escape')closeDeviceList();});
+document.addEventListener('click',e=>{if(!e.target.closest('.device-picker'))closeDeviceList()});
 
-function setMode(m){mode=m;$('custom').style.display=m==='CON'?'block':'none';$('mCON').classList.toggle('on',m==='CON');$('mSIN').classList.toggle('on',m==='SIN')}
-$('mCON').onclick=()=>setMode('CON');$('mSIN').onclick=()=>setMode('SIN');
-document.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{
-  inten=b.dataset.i;document.querySelectorAll('[data-i]').forEach(x=>x.classList.toggle('on',x===b))});
-
-function render(list){
-  const L=$('list');
-  if(!list.length){L.innerHTML='<div style="color:rgba(255,255,255,.4)">No encontrado</div>'}
-  else L.innerHTML=list.map((d,i)=>`<div data-k="${d.name}"><span>${d.name}</span><small>${d.tier}</small></div>`).join('');
-  L.style.display='block';
-  L.querySelectorAll('[data-k]').forEach(el=>el.onclick=()=>{
-    dev=DEV.find(d=>d.name===el.dataset.k);$('q').value=dev.name;$('devInfo').textContent=dev.tier;
-    L.style.display='none'});
+const clamp=(v,min=0,max=200)=>Math.max(min,Math.min(max,Math.round(v)));
+$('con').onclick=()=>setMode('CON'); $('sin').onclick=()=>setMode('SIN');
+function setMode(m){mode=m;$('con').classList.toggle('active',m==='CON');$('sin').classList.toggle('active',m==='SIN');$('dpiField').classList.toggle('hidden',m==='SIN')}
+document.querySelectorAll('[data-int]').forEach(b=>b.onclick=()=>{intensity=b.dataset.int;document.querySelectorAll('[data-int]').forEach(x=>x.classList.toggle('active',x===b))});
+function key(){let d=$('device').value.trim().toLowerCase()||'dispositivo-personalizado';let dpi=mode==='CON'?String(Number($('dpi').value)):'SIN_DPI';return 'SENSIX_CALIB_V2|'+d+'|'+mode+'|'+intensity+'|'+dpi}
+function tierAdjustment(device){let s=device.toLowerCase();if(/iphone|s2[234]|pixel [89]|oneplus 1[12]|x6 pro|xiaomi 14/.test(s))return -2;if(/galaxy a0|moto g|redmi note|infinix|tecno/.test(s))return 2;return 0}
+function initialValues(){
+ let base={BAJA:78,MEDIA:100,ALTA:125}[intensity], device=$('device').value.trim()||'Dispositivo personalizado';
+ let adj=tierAdjustment(device), dpiAdj=0;
+ if(mode==='CON'){let d=Number($('dpi').value);dpiAdj=clamp((400-d)*.03,-6,6)}
+ let g=clamp(base+adj+dpiAdj,40,180);
+ return {values:[g,clamp(g*.97),clamp(g*.93),clamp(g*.85),clamp(g*.65),clamp(g*.95)],round:0};
 }
-const nz=t=>t.toLowerCase().replace(/[\s\-]/g,'');
-$('q').oninput=e=>{
-  const v=nz(e.target.value.trim());
-  const m=v?DEV.filter(d=>nz(d.name).includes(v)).slice(0,12):DEV.slice(0,8);
-  render(m);
-  if(v&&!m.length){dev=null;$('devInfo').textContent='modelo libre'}
-};
-$('q').onfocus=()=>render(DEV.filter(d=>nz(d.name).includes(nz($('q').value.trim()))).slice(0,12));
-document.addEventListener('click',e=>{if(!e.target.closest('#list,#q'))$('list').style.display='none'});
-
-let sound=true,AC=null;
-function ctx(){try{if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;AC=new C()}
-  if(AC.state==='suspended')AC.resume().catch(()=>{});return AC}catch(e){return null}}
-function tone(freq,vol,dur,delay=0){
-  if(!sound)return;const c=ctx();if(!c)return;
-  try{const t=c.currentTime+delay,o=c.createOscillator(),g=c.createGain();
-    o.type='sine';o.frequency.setValueAtTime(freq,t);g.gain.setValueAtTime(vol,t);
-    g.gain.exponentialRampToValueAtTime(0.001,t+dur);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur)}catch(e){}
+function loadProfile(){try{return JSON.parse(localStorage.getItem(key()))}catch(e){return null}}
+function saveProfile(p){localStorage.setItem(key(),JSON.stringify(p))}
+function makeResult(p){return {values:p.values.slice(),round:p.round||0,mode,intensity,device:$('device').value.trim()||'Dispositivo personalizado',dpi:mode==='CON'?Number($('dpi').value):null}}
+function render(x){
+ current=x;$('setup').classList.add('hidden');$('loading').classList.add('hidden');$('results').classList.remove('hidden');
+ $('stats').innerHTML=names.map((n,i)=>`<div class="stat"><span>${n}</span><b>${x.values[i]}</b></div>`).join('');
+ $('meta').innerHTML=`<span class="pill">${x.mode} DPI</span><span class="pill">${x.intensity}</span><span class="pill">RONDA ${x.round+1}</span><br>Dispositivo: ${escapeHtml(x.device)}<br>${x.mode==='CON'?'DPI utilizado: '+x.dpi+' (sin modificar el sistema)':'No se requiere ni se modifica el DPI.'}<br>Prueba cada mira en Free Fire y ajusta según el resultado.`;
 }
-const tick=()=>tone(220,.07,.12);
-const chime=()=>{tone(880,.32,.32);tone(1320,.36,.55,.15);tone(1760,.08,.45,.15)};
-$('snd').onclick=()=>{sound=!sound;$('snd').textContent=sound?'🔊 SONIDO: ON':'🔇 SONIDO: OFF';ctx()};
-const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-function calc(){
-  const d=dev||{name:$('q').value.trim()||'Personalizado',dpi:400,tier:'mid'};
-  const real=+$('cdpi').value||0;
-  const base={BAJA:75,MEDIA:100,ALTA:130}[inten];
-  const adj=Math.max(-6,Math.min(6,Math.round((400-d.dpi)*0.03)));
-  const tier=d.tier==='low'?3:d.tier==='flagship'?-3:0;
-  const g=Math.max(40,Math.min(180,base+adj+tier+r(-2,2)));
-  const f=k=>Math.round(g*k);
-  let rec=real;
-  if(mode==='CON'&&real){rec=real+(d.tier==='flagship'?r(15,35):d.tier==='low'?r(40,90):r(30,60));rec=Math.min(640,Math.round(rec/10)*10)}
-  return{d,out:{general:g,puntoRojo:f(.97),mira2x:f(.93),mira4x:f(.85),miraAWM:f(.65),miraLibre:f(.95)},boton:r(48,52),dpiF:real,dpiR:rec}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function run(){if(!$('device').value.trim())$('device').value='Dispositivo personalizado';if(mode==='CON'){let d=Number($('dpi').value);if(!Number.isInteger(d)||d<240||d>800){alert('Introduce tu DPI actual entre 240 y 800.');$('dpi').focus();return}}
+ $('setup').classList.add('hidden');$('results').classList.add('hidden');$('loading').classList.remove('hidden');
+ setTimeout(()=>{let p=loadProfile()||initialValues();saveProfile(p);render(makeResult(p))},900)}
+function calibrateAgain(){
+ let p=loadProfile()||{values:current.values.slice(),round:current.round};let changed=0;
+ for(let i=0;i<names.length;i++){
+  let answer=prompt(`${names[i]}: ¿qué pasó al probarla en Free Fire?\n\n1 = Se pasa de la cabeza (bajar ${names[i]==='AWM'?2:3})\n2 = Se queda corta (subir ${names[i]==='AWM'?2:3})\n3 = Queda correcta (mantener)\n\nCancelar = dejar esta mira sin cambios`);
+  if(answer===null)continue;answer=answer.trim();
+  let step=i===4?2:3;
+  if(answer==='1'){p.values[i]=clamp(p.values[i]-step);changed++}
+  else if(answer==='2'){p.values[i]=clamp(p.values[i]+step);changed++}
+  else if(answer==='3'){}
+  else {alert('Respuesta no válida. Esta mira se conserva sin cambios.')}
+ }
+ p.round=(p.round||0)+1;saveProfile(p);render(makeResult(p));
+ alert(`Calibración guardada. Se ajustaron ${changed} miras. Prueba otra vez y repite el proceso para afinar más.`);
 }
-const LBL={general:'General',puntoRojo:'Punto Rojo',mira2x:'Mira 2x',mira4x:'Mira 4x',miraAWM:'Mira AWM',miraLibre:'Mira Libre'};
-function show(x,scroll=true){
-  last=x;
-  $('resHead').textContent=`${x.d.name} · ${mode==='CON'?x.dpiF+' DPI · ':''}${inten} · ${mode} DPI`;
-  $('items').innerHTML=Object.entries(x.out).map(([k,v])=>
-    `<div class="item"><span>${LBL[k]}</span><span><span class="bar"><i style="width:${v/200*100}%"></i></span><span class="val">${v}</span></span></div>`).join('');
-  $('extra').innerHTML=`Botón de disparo: <b>${x.boton}%</b><br>${mode==='CON'?`DPI: ${x.dpiF} → <b>${x.dpiR} (sugerido)</b>`:'Modo sin cambio de DPI'}`;
-  $('res').classList.add('show');
-  if(scroll)$('res').scrollIntoView({behavior:'smooth',block:'start'});
-}
-function run(){
-  if(busy)return;
-  if(mode==='CON'&&!(+$('cdpi').value>=240)){$('cdpi').focus();$('cdpi').style.borderColor='#FF0040';return}
-  busy=true;ctx();$('res').classList.remove('up');
-  const nm=dev?dev.name:($('q').value.trim()||'Personalizado');
-  $('lcName').textContent=nm;$('lcMode').textContent=mode+' DPI · '+inten;
-  let t=9;$('cnt').textContent=t;$('pb').style.transition='none';$('pb').style.width='0%';
-  $('load').classList.add('show');
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{$('pb').style.transition='width 1s linear';$('pb').style.width=((9-t)/9*100)+'%'}));
-  const iv=setInterval(()=>{
-    t--;if(t>0)tick();$('cnt').textContent=t;$('pb').style.width=((9-t)/9*100)+'%';
-    if(t<=0){
-      clearInterval(iv);
-      const x=calc();$('load').classList.remove('show');
-      $('bnDev').textContent=nm.toUpperCase()+(mode==='CON'&&x.dpiF?' · '+x.dpiF+' DPI':'');
-      $('bn').classList.remove('out');$('ban').classList.add('show');chime();
-      show(x,false);$('res').classList.add('up');
-      setTimeout(()=>$('res').scrollIntoView({behavior:'smooth',block:'start'}),600);
-      setTimeout(()=>$('bn').classList.add('out'),1500);
-      setTimeout(()=>{$('ban').classList.remove('show');busy=false},2000);
-    }
-  },1000);
-}
-$('go').onclick=run;$('again').onclick=run;
-$('copy').onclick=()=>{
-  if(!last)return;const x=last,o=x.out;
-  const txt=`SENSI IA - ${x.d.name}\nGeneral: ${o.general}\nPunto Rojo: ${o.puntoRojo}\nMira 2x: ${o.mira2x}\nMira 4x: ${o.mira4x}\nMira AWM: ${o.miraAWM}\nMira Libre: ${o.miraLibre}\nBotón: ${x.boton}%\n${mode==='CON'?'DPI: '+x.dpiF+' → '+x.dpiR+'\n':''}Modo: ${mode} DPI | ${inten}`;
-  const done=()=>{$('copy').textContent='¡COPIADO!';setTimeout(()=>$('copy').textContent='COPIAR',1800)};
-  if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done,done);else done();
-};
+$('go').onclick=run;$('again').onclick=calibrateAgain;
+$('back').onclick=()=>{$('results').classList.add('hidden');$('setup').classList.remove('hidden')};
+$('copy').onclick=async()=>{if(!current)return;let txt=`SENSI X IA - FREE FIRE\nDispositivo: ${current.device}\nModo: ${current.mode} DPI\nIntensidad: ${current.intensity}\n${current.mode==='CON'?'DPI actual: '+current.dpi+'\n':'DPI: No utilizado\n'}${names.map((n,i)=>n+': '+current.values[i]).join('\n')}\nRonda: ${current.round+1}`;
+ try{await navigator.clipboard.writeText(txt);alert('Sensibilidades copiadas.')}catch(e){let t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('Sensibilidades copiadas.')}}
 </script>
 </body>
-</html>
+  </html>
