@@ -1219,12 +1219,18 @@ function calibrateAgain(){
  let p=loadProfile()||{values:current.values.slice(),round:current.round};let changed=0;
  for(let i=0;i<names.length;i++){
   let answer=prompt(`${names[i]}: ¿qué pasó al probarla en Free Fire?\n\n1 = Se pasa de la cabeza (bajar ${names[i]==='AWM'?2:3})\n2 = Se queda corta (subir ${names[i]==='AWM'?2:3})\n3 = Queda correcta (mantener)\n\nCancelar = dejar esta mira sin cambios`);
-  if(answer===null)continue;answer=answer.trim();
+  if(answer===null)continue;
+  answer=answer.trim().toLocaleLowerCase('es');
+  // Acepta tanto el número como respuestas escritas completas.
+  let choice='';
+  if(/^1(?:\s|$|[=.)-])/.test(answer)||answer.includes('se pasa')||answer.includes('pasada'))choice='1';
+  else if(/^2(?:\s|$|[=.)-])/.test(answer)||answer.includes('se queda corta')||answer.includes('corta')||answer.includes('no llega'))choice='2';
+  else if(/^3(?:\s|$|[=.)-])/.test(answer)||answer.includes('correcta')||answer.includes('está bien')||answer.includes('esta bien')||answer.includes('mantener'))choice='3';
   let step=i===4?2:3;
-  if(answer==='1'){p.values[i]=clamp(p.values[i]-step);changed++}
-  else if(answer==='2'){p.values[i]=clamp(p.values[i]+step);changed++}
-  else if(answer==='3'){}
-  else {alert('Respuesta no válida. Esta mira se conserva sin cambios.')}
+  if(choice==='1'){p.values[i]=clamp(p.values[i]-step);changed++}
+  else if(choice==='2'){p.values[i]=clamp(p.values[i]+step);changed++}
+  else if(choice==='3'){}
+  else {alert('Respuesta no válida. Escribe 1, 2 o 3, o selecciona una de las respuestas indicadas. Esta mira se conserva sin cambios.')}
  }
  p.round=(p.round||0)+1;saveProfile(p);render(makeResult(p));
  alert(`Calibración guardada. Se ajustaron ${changed} miras. Prueba otra vez y repite el proceso para afinar más.`);
@@ -1235,4 +1241,4 @@ $('copy').onclick=async()=>{if(!current)return;let txt=`SENSI X IA - FREE FIRE\n
  try{await navigator.clipboard.writeText(txt);alert('Sensibilidades copiadas.')}catch(e){let t=document.createElement('textarea');t.value=txt;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove();alert('Sensibilidades copiadas.')}}
 </script>
 </body>
-  </html>
+</html>
